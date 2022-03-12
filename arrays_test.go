@@ -59,6 +59,27 @@ func TestMaxProfit(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		assert.Equal(t, test.expect, MaxProfit(test.prices))
+		assert.Equal(t, test.expect, MaxProfitReadability(test.prices))
+	}
+}
+
+func TestRotate(t *testing.T) {
+	tests := []struct {
+		nums   []int
+		k      int
+		expect []int
+	}{
+		{
+			nums: []int{1, 2, 3, 4, 5, 6, 7}, k: 3,
+			expect: []int{5, 6, 7, 1, 2, 3, 4},
+		},
+		{
+			nums: []int{-1, -100, 3, 99}, k: 2,
+			expect: []int{3, 99, -1, -100},
+		},
+	}
+	for _, test := range tests {
+		RotateHack(test.nums, test.k) // in place
+		assert.Equal(t, test.expect, test.nums)
 	}
 }
