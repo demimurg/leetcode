@@ -5,7 +5,7 @@ package leetcode
 // The relative order of the elements should be kept the same.
 // Return k after placing the final result in the first k slots of nums
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/727/
-func RemoveDuplicates(nums []int) int {
+func removeDuplicates(nums []int) int {
 	k := 1 // k slots guaranteed to be non-duplicate
 	for i := range nums {
 		if nums[i] != nums[k-1] {
@@ -20,7 +20,7 @@ func RemoveDuplicates(nums []int) int {
 // On each day, you may decide to buy and/or sell the stock. You can only hold at most one share of the stock at any time. However, you can buy it then immediately sell it on the same day.
 // Find and return the maximum profit you can achieve. 0 <= prices[i] <= 10^4
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/564/
-func MaxProfitReadability(prices []int) int {
+func maxProfit(prices []int) int {
 	var (
 		profit int
 		bought int = 1e6 // all prices are lower
@@ -38,8 +38,8 @@ func MaxProfitReadability(prices []int) int {
 	return profit
 }
 
-// another realization, buy/sell stocks each day the cost increases
-func MaxProfitShorteness(prices []int) int {
+func maxProfit2(prices []int) int {
+	// another realization, buy/sell stocks each day the cost increases
 	profit := 0
 	for i := 1; i < len(prices); i++ {
 		if prices[i] > prices[i-1] {
@@ -52,8 +52,9 @@ func MaxProfitShorteness(prices []int) int {
 // Given an array, rotate the array to the right by k steps, where k is non-negative.
 // * Try to come up with as many solutions as you can. There are at least three different ways to solve this problem.
 // * Could you do it in-place with O(1) extra space?
-func RotateCPU(nums []int, k int) {
-	k = k % len(nums)
+// https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/646/
+func rotate(nums []int, k int) {
+	k = k % len(nums) // throw period away
 	shift := make([]int, k)
 	copy(shift, nums[len(nums)-k:])
 
@@ -63,7 +64,9 @@ func RotateCPU(nums []int, k int) {
 	copy(nums, shift)
 }
 
-func RotateRAM(nums []int, k int) {
+func rotate2(nums []int, k int) {
+	// rotate realization with ram optimized
+	k = k % len(nums)
 	for i := 0; i < k; i++ {
 		buffer := nums[0]
 		for j := 0; j < len(nums); j++ {
@@ -73,7 +76,8 @@ func RotateRAM(nums []int, k int) {
 	}
 }
 
-func RotateHack(nums []int, k int) {
+func rotate3(nums []int, k int) {
+	// hacky rotate realization, short and efficient
 	reverse := func(nums []int) {
 		for i := 0; i < len(nums)/2; i++ {
 			j := len(nums) - i - 1
@@ -85,4 +89,114 @@ func RotateHack(nums []int, k int) {
 	reverse(nums)
 	reverse(nums[:k])
 	reverse(nums[k:])
+}
+
+// Given an integer array nums, return true if any value appears
+// at least twice in the array, and return false if every element is distinct.
+// https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/578/
+func containsDuplicate(nums []int) bool {
+	seen := make(map[int]struct{}) // use struct{} to save memory
+	for _, num := range nums {
+		if _, ok := seen[num]; ok {
+			return true
+		}
+		seen[num] = struct{}{}
+	}
+	return false
+}
+
+// Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.
+// * You must implement a solution with a linear runtime complexity and use only constant extra space.
+// https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/549/
+func singleNumber(nums []int) int {
+	res := 0
+	for i := range nums {
+		res ^= nums[i]
+	}
+	return res
+}
+
+// Given two integer arrays nums1 and nums2, return an array of their intersection.
+// Each element in the result must appear as many times as it shows in
+// both arrays, and you may return the result in any order.
+// https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/674/
+func intersect(nums1, nums2 []int) []int {
+	count := make(map[int]int)
+	for _, n := range nums1 {
+		count[n]++
+	}
+
+	result := make([]int, 0, len(count))
+	for _, n := range nums2 {
+		if count[n] > 0 {
+			result = append(result, n)
+			count[n]--
+		}
+	}
+
+	return result
+}
+
+// You are given a large integer represented as an integer array digits,
+// where each digits[i] is the ith digit of the integer. The digits are
+// ordered from most significant to the least significant in left-to-right order.
+// The large integer does not contain any leading 0's.
+// Increment the large integer by one and return the resulting array of digits.
+// * 1 <= digits.length <= 100
+// * 0 <= digits[i] <= 9
+// * digits does not contain any leading 0's.
+// https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/559/
+func plusOne(digits []int) []int {
+	for i := len(digits) - 1; i >= 0; i-- {
+		if digits[i] < 9 {
+			digits[i]++
+			break
+		}
+		digits[i] = 0
+	}
+
+	// slice does not contain any leading 0's, so it can be only overflow (099..9)
+	if digits[0] == 0 {
+		return append([]int{1}, digits...)
+	}
+	return digits
+}
+
+// Given an integer array nums, move all 0's to the end of it while
+// maintaining the relative order of the non-zero elements.
+// * note that you must do this in-place without making a copy of the array.
+// https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/567/
+func moveZeroes(nums []int) {
+	j := 0
+	for i := 0; i < len(nums); i++ {
+		if nums[i] != 0 {
+			nums[j] = nums[i]
+			j++
+		}
+	}
+	for i := j; i < len(nums); i++ {
+		nums[i] = 0
+	}
+}
+
+// Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+// You may assume that each input would have exactly one solution, and you may not use the same element twice.
+// You can return the answer in any order.
+// https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/546/
+func twoSum(nums []int, target int) []int {
+	idx := make(map[int]int)
+	for i, n := range nums {
+		idx[n] = i
+	}
+
+	for n, i1 := range idx {
+		m := target - n
+		if m < 0 || m == n {
+			continue
+		}
+		if i2, ok := idx[m]; ok {
+			return []int{i1, i2}
+		}
+	}
+	return nil
 }

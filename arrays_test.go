@@ -25,7 +25,7 @@ func TestRemoveDuplicates(t *testing.T) {
 		},
 	} {
 		// remove duplicates in place and don't change slice size
-		i := RemoveDuplicates(test.sortedList)
+		i := removeDuplicates(test.sortedList)
 		assert.Equal(t, test.expect, test.sortedList[:i])
 	}
 }
@@ -59,7 +59,7 @@ func TestMaxProfit(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		assert.Equal(t, test.expect, MaxProfitReadability(test.prices))
+		assert.Equal(t, test.expect, maxProfit(test.prices))
 	}
 }
 
@@ -79,7 +79,124 @@ func TestRotate(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		RotateHack(test.nums, test.k) // in place
+		rotate(test.nums, test.k) // in place
+		assert.Equal(t, test.expect, test.nums)
+	}
+}
+
+func TestContainsDuplicate(t *testing.T) {
+	tests := []struct {
+		nums   []int
+		expect bool
+	}{
+		{
+			nums:   []int{1, 2, 3, 1},
+			expect: true,
+		},
+		{
+			nums:   []int{1, 2, 3, 4},
+			expect: false,
+		},
+		{
+			nums:   []int{1, 1, 1, 3, 3, 4, 3, 2, 4, 2},
+			expect: true,
+		},
+	}
+	for _, test := range tests {
+		assert.Equal(t, test.expect, containsDuplicate(test.nums))
+	}
+}
+
+func TestSingleNumber(t *testing.T) {
+	tests := []struct {
+		nums   []int
+		expect int
+	}{
+		{
+			nums:   []int{2, 2, 1},
+			expect: 1,
+		},
+		{
+			nums:   []int{4, 1, 2, 1, 2},
+			expect: 4,
+		},
+		{
+			nums:   []int{1},
+			expect: 1,
+		},
+	}
+	for _, test := range tests {
+		assert.Equal(t, test.expect, singleNumber(test.nums))
+	}
+}
+
+func TestIntersect(t *testing.T) {
+	tests := []struct {
+		nums1, nums2 []int
+		expect       []int
+	}{
+		{
+			nums1:  []int{1, 2, 2, 1},
+			nums2:  []int{2, 2},
+			expect: []int{2, 2},
+		},
+		{
+			nums1:  []int{4, 9, 5},
+			nums2:  []int{9, 4, 9, 8, 4},
+			expect: []int{4, 9},
+		},
+	}
+	for _, test := range tests {
+		assert.ElementsMatch(
+			t, test.expect,
+			intersect(test.nums1, test.nums2),
+		)
+	}
+}
+
+func TestPlusOne(t *testing.T) {
+	tests := []struct {
+		nums   []int
+		expect []int
+	}{
+		{
+			nums:   []int{1, 2, 3},
+			expect: []int{1, 2, 4},
+		},
+		{
+			nums:   []int{4, 3, 2, 1},
+			expect: []int{4, 3, 2, 2},
+		},
+		{
+			nums:   []int{9},
+			expect: []int{1, 0},
+		},
+		{
+			nums:   []int{8, 9},
+			expect: []int{9, 0},
+		},
+	}
+	for _, test := range tests {
+		assert.Equal(t, test.expect, plusOne(test.nums))
+	}
+}
+
+func TestMoveZeroes(t *testing.T) {
+	tests := []struct {
+		nums   []int
+		expect []int
+	}{
+		{
+			nums:   []int{0, 1, 0, 3, 12},
+			expect: []int{1, 3, 12, 0, 0},
+		},
+		{
+			nums:   []int{0},
+			expect: []int{0},
+		},
+	}
+	for _, test := range tests {
+		moveZeroes(test.nums)
 		assert.Equal(t, test.expect, test.nums)
 	}
 }
