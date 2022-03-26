@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestRemoveDuplicates(t *testing.T) {
@@ -198,5 +199,81 @@ func TestMoveZeroes(t *testing.T) {
 	for _, test := range tests {
 		moveZeroes(test.nums)
 		assert.Equal(t, test.expect, test.nums)
+	}
+}
+
+func TestTwoSum(t *testing.T) {
+	tests := []struct {
+		nums   []int
+		target int
+		expect []int
+	}{
+		{
+			nums: []int{2, 7, 11, 15}, target: 9,
+			expect: []int{0, 1},
+		},
+		{
+			nums: []int{3, 2, 4}, target: 6,
+			expect: []int{1, 2},
+		},
+		{
+			nums: []int{3, 3}, target: 6,
+			expect: []int{0, 1},
+		},
+	}
+	for _, test := range tests {
+		assert.Equal(t, test.expect, twoSum(test.nums, test.target))
+	}
+}
+
+func TestIsValidSudoku(t *testing.T) {
+	assert.Equal(t, true, isValidSudoku([][]byte{
+		{'5', '3', '.', '.', '7', '.', '.', '.', '.'},
+		{'6', '.', '.', '1', '9', '5', '.', '.', '.'},
+		{'.', '9', '8', '.', '.', '.', '.', '6', '.'},
+		{'8', '.', '.', '.', '6', '.', '.', '.', '3'},
+		{'4', '.', '.', '8', '.', '3', '.', '.', '1'},
+		{'7', '.', '.', '.', '2', '.', '.', '.', '6'},
+		{'.', '6', '.', '.', '.', '.', '2', '8', '.'},
+		{'.', '.', '.', '4', '1', '9', '.', '.', '5'},
+		{'.', '.', '.', '.', '8', '.', '.', '7', '9'},
+	}))
+}
+
+func TestRotateImage(t *testing.T) {
+	tests := []struct {
+		matrix [][]int
+		expect [][]int
+	}{
+		{
+			matrix: [][]int{
+				{1, 2, 3},
+				{4, 5, 6},
+				{7, 8, 9},
+			},
+			expect: [][]int{
+				{7, 4, 1},
+				{8, 5, 2},
+				{9, 6, 3},
+			},
+		},
+		{
+			matrix: [][]int{
+				{5, 1, 9, 11},
+				{2, 4, 8, 10},
+				{13, 3, 6, 7},
+				{15, 14, 12, 16},
+			},
+			expect: [][]int{
+				{15, 13, 2, 5},
+				{14, 3, 4, 1},
+				{12, 6, 8, 9},
+				{16, 7, 10, 11},
+			},
+		},
+	}
+	for _, test := range tests {
+		rotateImage(test.matrix)
+		require.Equal(t, test.expect, test.matrix)
 	}
 }

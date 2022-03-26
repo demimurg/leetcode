@@ -33,7 +33,6 @@ func maxProfit(prices []int) int {
 			profit += prices[i] - bought
 			bought = 1e6 // just for correct compare operation
 		}
-
 	}
 	return profit
 }
@@ -185,18 +184,61 @@ func moveZeroes(nums []int) {
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/546/
 func twoSum(nums []int, target int) []int {
 	idx := make(map[int]int)
-	for i, n := range nums {
-		idx[n] = i
-	}
-
-	for n, i1 := range idx {
-		m := target - n
-		if m < 0 || m == n {
-			continue
-		}
-		if i2, ok := idx[m]; ok {
+	for i1, n := range nums {
+		if i2, ok := idx[target-n]; ok {
 			return []int{i1, i2}
 		}
+		idx[n] = i1
 	}
 	return nil
+}
+
+// Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
+// Each row must contain the digits 1-9 without repetition.
+// Each column must contain the digits 1-9 without repetition.
+// Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
+// https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/769/
+func isValidSudoku(board [][]byte) bool {
+	var rows, columns, squares [9][9]bool
+	for i := range board {
+		for j, val := range board[i] {
+			if val == '.' {
+				continue
+			}
+
+			val -= '1' // use array indexes to mark already seen values
+			squareIdx := i/3*3 + j/3
+			if rows[i][val] || columns[j][val] || squares[squareIdx][val] {
+				return false
+			}
+			rows[i][val], columns[j][val], squares[squareIdx][val] = true, true, true
+		}
+	}
+	return true
+}
+
+// You are given an n x n 2D matrix representing an image, rotate the image by 90 degrees (clockwise).
+// You have to rotate the image in-place, which means you have to modify the input 2D matrix directly.
+// DO NOT allocate another 2D matrix and do the rotation.
+// Constraints:
+// * n == matrix.length == matrix[i].length
+// * 1 <= n <= 20
+// * -1000 <= matrix[i][j] <= 1000
+// https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/770/
+func rotateImage(matrix [][]int) {
+	size := len(matrix)
+	// transpose matrix first
+	for i := 0; i < size-1; i++ {
+		for j := 0; j < size-i-1; j++ {
+			invI, invJ := size-i-1, size-j-1
+			matrix[i][j], matrix[invJ][invI] = matrix[invJ][invI], matrix[i][j]
+		}
+	}
+	// invert rows (i with size-i-i)
+	for i := 0; i < size/2; i++ {
+		for j := 0; j < size; j++ {
+			invI := size - i - 1
+			matrix[i][j], matrix[invI][j] = matrix[invI][j], matrix[i][j]
+		}
+	}
 }
