@@ -222,7 +222,7 @@ func TestTwoSum(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		assert.Equal(t, test.expect, twoSum(test.nums, test.target))
+		assert.ElementsMatch(t, test.expect, twoSum(test.nums, test.target))
 	}
 }
 
