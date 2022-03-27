@@ -83,3 +83,35 @@ func TestIsPalindrome(t *testing.T) {
 		)
 	}
 }
+
+func TestMyAtoi(t *testing.T) {
+	for _, test := range []struct {
+		s      string
+		expect int
+	}{
+		{"42", 42},
+		{"   -42", -42},
+		{"4193 with words", 4193},
+		{"-91283472332", -2147483648},
+		{"9223372036854775808", 2147483647},
+	} {
+		t.Run(test.s, func(t *testing.T) {
+			assert.Equal(t, test.expect, myAtoi(test.s))
+		})
+
+	}
+}
+
+func TestStrStr(t *testing.T) {
+	for _, test := range []struct {
+		haystack, needle string
+		expect           int
+	}{
+		{"hello", "ll", 2},
+		{"aaaaa", "bba", -1},
+		{"", "", 0},
+		{"mississippi", "issip", 4},
+	} {
+		assert.Equal(t, test.expect, strStr(test.haystack, test.needle))
+	}
+}
