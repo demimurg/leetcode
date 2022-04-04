@@ -115,3 +115,16 @@ func TestStrStr(t *testing.T) {
 		assert.Equal(t, test.expect, strStr(test.haystack, test.needle))
 	}
 }
+
+func TestLongestCommonPrefix(t *testing.T) {
+	for _, test := range []struct {
+		strs   []string
+		expect string
+	}{
+		{[]string{"flower", "flow", "flight"}, "fl"},
+		{[]string{"dog", "racecar", "car"}, ""},
+		{[]string{"dog", "dog", "dog"}, "dog"},
+	} {
+		assert.Equal(t, test.expect, longestCommonPrefix(test.strs))
+	}
+}

@@ -171,3 +171,26 @@ LOOP:
 	}
 	return -1
 }
+
+// Write a function to find the longest common prefix string amongst an array of strings.
+// If there is no common prefix, return an empty string "".
+// https://leetcode.com/explore/interview/card/top-interview-questions-easy/127/strings/887/
+func longestCommonPrefix(strs []string) string {
+	minLen := math.MaxInt32
+	for _, str := range strs {
+		if len(str) < minLen {
+			minLen = len(str)
+		}
+	}
+
+	var i int
+	for i = 0; i < minLen; i++ {
+		char := strs[0][i] // last char from prefix
+		for _, str := range strs {
+			if str[i] != char {
+				return str[:i]
+			}
+		}
+	}
+	return strs[0][:i]
+}
