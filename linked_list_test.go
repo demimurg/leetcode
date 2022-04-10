@@ -113,3 +113,24 @@ func TestMergeTwoLists(t *testing.T) {
 		assert.Equal(t, test.expect, convertToList(mergeTwoLists(head1, head2)))
 	}
 }
+
+func TestIsPalindromeList(t *testing.T) {
+	testCases := []struct {
+		list   []int
+		expect bool
+	}{
+		{
+			list:   []int{1, 2, 2, 1},
+			expect: true,
+		},
+		{
+			list:   []int{1, 2},
+			expect: false,
+		},
+	}
+
+	for _, test := range testCases {
+		head := convertToLinkedList(test.list)
+		assert.Equal(t, test.expect, isPalindromeList(head))
+	}
+}
