@@ -30,21 +30,84 @@ func ConvertToTreeNode(tree []int) *TreeNode {
 
 func TestDepth(t *testing.T) {
 	testCases := []struct {
-		list   []int
+		tree   []int
 		expect int
 	}{
 		{
-			list:   []int{3, 9, 20, null, null, 15, 7},
+			tree:   []int{3, 9, 20, null, null, 15, 7},
 			expect: 3,
 		},
 		{
-			list:   []int{1, null, 2},
+			tree:   []int{1, null, 2},
 			expect: 2,
 		},
 	}
 
 	for _, test := range testCases {
-		tree := ConvertToTreeNode(test.list)
+		tree := ConvertToTreeNode(test.tree)
 		assert.Equal(t, test.expect, maxDepth(tree))
+	}
+}
+
+func TestIsValidBST(t *testing.T) {
+	testCases := []struct {
+		tree   []int
+		expect bool
+	}{
+		{
+			tree:   []int{2, 1, 3},
+			expect: true,
+		},
+		{
+			tree:   []int{5, 1, 4, null, null, 3, 6},
+			expect: false,
+		},
+	}
+
+	for _, test := range testCases {
+		tree := ConvertToTreeNode(test.tree)
+		assert.Equal(t, test.expect, isValidBST(tree))
+	}
+}
+
+func TestIsSymmetric(t *testing.T) {
+	testCases := []struct {
+		tree   []int
+		expect bool
+	}{
+		{
+			tree:   []int{1, 2, 2, 3, 4, 4, 3},
+			expect: true,
+		},
+		{
+			tree:   []int{1, 2, 2, null, 3, null, 3},
+			expect: false,
+		},
+	}
+
+	for _, test := range testCases {
+		tree := ConvertToTreeNode(test.tree)
+		assert.Equal(t, test.expect, isSymmetric(tree))
+	}
+}
+
+func TestLevelOrder(t *testing.T) {
+	testCases := []struct {
+		tree   []int
+		expect [][]int
+	}{
+		{
+			tree:   []int{3, 9, 20, null, null, 15, 7},
+			expect: [][]int{{3}, {9, 20}, {15, 7}},
+		},
+		{
+			tree:   []int{1},
+			expect: [][]int{{1}},
+		},
+	}
+
+	for _, test := range testCases {
+		tree := ConvertToTreeNode(test.tree)
+		assert.Equal(t, test.expect, levelOrder(tree))
 	}
 }

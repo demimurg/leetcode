@@ -80,24 +80,21 @@ func mergeTwoLists(node1, node2 *ListNode) *ListNode {
 
 // Given the head of a singly linked list, return true if it is a palindrome.
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/93/linked-list/772/
-func isPalindromeList(node *ListNode) bool {
-	head = node
-	return recursiveCheck(node)
-}
-
-var head *ListNode
-
-func recursiveCheck(node *ListNode) bool {
-	if node != nil {
-		if !recursiveCheck(node.Next) {
-			return false
+func isPalindromeList(head *ListNode) bool {
+	var check func(listNode *ListNode) bool
+	check = func(node *ListNode) bool {
+		if node != nil {
+			if !check(node.Next) {
+				return false
+			}
+			if head.Val != node.Val {
+				return false
+			}
+			head = head.Next
 		}
-		if head.Val != node.Val {
-			return false
-		}
-		head = head.Next
+		return true
 	}
-	return true
+	return check(head)
 }
 
 // Given head, the head of a linked list, determine if the linked list has a cycle in it.
