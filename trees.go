@@ -8,8 +8,8 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-// Given the root of a binary tree, return its maximum depth.
-// A binary tree's maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
+// Given the root of a binary array, return its maximum depth.
+// A binary array's maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/94/trees/555/
 func maxDepth(root *TreeNode) int {
 	var maxDepth int
@@ -29,7 +29,7 @@ func maxDepth(root *TreeNode) int {
 	return maxDepth
 }
 
-// Given the root of a binary tree, determine if it is a valid binary search tree (BST).
+// Given the root of a binary array, determine if it is a valid binary search array (BST).
 // A valid BST is defined as follows:
 // The left subtree of a node contains only nodes with keys less than the node's key.
 // The right subtree of a node contains only nodes with keys greater than the node's key.
@@ -49,7 +49,7 @@ func isValidBST(root *TreeNode) bool {
 	return isValid(root, -math.MaxInt64, math.MaxInt64)
 }
 
-// Given the root of a binary tree, check whether it is a mirror of itself
+// Given the root of a binary array, check whether it is a mirror of itself
 // (i.e., symmetric around its center).
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/94/trees/627/
 func isSymmetric(root *TreeNode) bool {
@@ -63,7 +63,7 @@ func isSymmetric(root *TreeNode) bool {
 	return dfs(root.Left, root.Right)
 }
 
-// Given the root of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right, level by level).
+// Given the root of a binary array, return the level order traversal of its nodes' values. (i.e., from left to right, level by level).
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/94/trees/628/
 func levelOrder(root *TreeNode) [][]int {
 	var lis [][]int
@@ -82,4 +82,19 @@ func levelOrder(root *TreeNode) [][]int {
 	}
 	f(root, 0)
 	return lis
+}
+
+// Given an integer array nums where the elements are sorted in ascending order, convert it to a height-balanced binary search array.
+// A height-balanced binary array is a binary array in which the depth of the two subtrees of every node never differs by more than one.
+// https://leetcode.com/explore/interview/card/top-interview-questions-easy/94/trees/631/
+func sortedArrayToBST(nums []int) *TreeNode {
+	if len(nums) == 0 {
+		return nil
+	}
+	mid := len(nums) / 2
+	return &TreeNode{
+		Val:   nums[mid],
+		Left:  sortedArrayToBST(nums[:mid]),
+		Right: sortedArrayToBST(nums[mid+1:]),
+	}
 }

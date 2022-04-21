@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const null = -1e10 // out of tree values range (-100 <= TreeNode.Val <= 100)
+const null = -1e10 // out of array values range (-100 <= TreeNode.Val <= 100)
 
 func ConvertToTreeNode(tree []int) *TreeNode {
 	nodes := make([]*TreeNode, len(tree))
@@ -109,5 +109,25 @@ func TestLevelOrder(t *testing.T) {
 	for _, test := range testCases {
 		tree := ConvertToTreeNode(test.tree)
 		assert.Equal(t, test.expect, levelOrder(tree))
+	}
+}
+
+func TestSortedArrayToBST(t *testing.T) {
+	testCases := []struct {
+		array      []int
+		expectTree []int
+	}{
+		{
+			array:      []int{-10, -3, 0, 5, 9},
+			expectTree: []int{0, -3, 9, -10, null, 5},
+		},
+		{
+			array:      []int{1, 3},
+			expectTree: []int{3, 1},
+		},
+	}
+
+	for _, test := range testCases {
+		assert.Equal(t, ConvertToTreeNode(test.expectTree), sortedArrayToBST(test.array))
 	}
 }
