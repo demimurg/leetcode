@@ -55,6 +55,7 @@ func maxSubArray(nums []int) int {
 // and it will automatically contact the police if two adjacent houses were broken into on the same night.
 // Given an integer array nums representing the amount of money of each house,
 // return the maximum amount of money you can rob tonight without alerting the police.
+// https://leetcode.com/explore/interview/card/top-interview-questions-easy/97/dynamic-programming/576/
 func rob(nums []int) int {
 	var rob1, rob2 int
 	for _, n := range nums {
