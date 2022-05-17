@@ -25,3 +25,20 @@ func TestIsPowerOfThree(t *testing.T) {
 		assert.Equal(t, test.expect, isPowerOfThree(test.n))
 	}
 }
+
+func TestRomanToInt(t *testing.T) {
+	testCases := []struct {
+		roman  string
+		expect int
+	}{
+		{roman: "III", expect: 3},
+		{roman: "LVIII", expect: 58},
+		{roman: "MCMXCIV", expect: 1994},
+	}
+
+	for _, test := range testCases {
+		t.Run(test.roman, func(t *testing.T) {
+			assert.Equal(t, test.expect, romanToInt(test.roman))
+		})
+	}
+}
