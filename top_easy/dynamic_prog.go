@@ -1,4 +1,4 @@
-package leetcode
+package top_easy
 
 import "math"
 
@@ -6,6 +6,26 @@ import "math"
 // Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/97/dynamic-programming/569/
 func climbStairs(n int) int {
+	memo := make(map[int]int)
+	return climbRecursive(n, memo)
+}
+
+func climbRecursive(n int, memo map[int]int) int {
+	if n <= 2 {
+		return n
+	}
+	if val, ok := memo[n]; ok {
+		return val
+	}
+	steps := climbRecursive(n-1, memo) + climbRecursive(n-2, memo)
+	memo[n] = steps
+	return steps
+}
+
+func climbStairs2(n int) int {
+	// in previous solving we can see that result is recursive call of f(n-1) + f(n-2)
+	// it is very similar to fibonacci numbers, we can rewrite func in this way:
+
 	a, b := 1, 1
 	for i := 0; i < n-1; i++ {
 		a, b = a+b, a
@@ -51,7 +71,7 @@ func maxSubArray(nums []int) int {
 
 // You are a professional robber planning to rob houses along a street.
 // Each house has a certain amount of money stashed, the only constraint stopping
-// you from robbing each of them is that adjacent houses have security systems connected
+// you from robbing each of them is that adjacent houses have security systems connected,
 // and it will automatically contact the police if two adjacent houses were broken into on the same night.
 // Given an integer array nums representing the amount of money of each house,
 // return the maximum amount of money you can rob tonight without alerting the police.

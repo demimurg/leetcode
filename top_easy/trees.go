@@ -1,4 +1,4 @@
-package leetcode
+package top_easy
 
 import "math"
 

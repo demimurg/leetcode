@@ -1,4 +1,4 @@
-package leetcode
+package top_easy
 
 // Given an integer array nums sorted in non-decreasing order,
 // remove the duplicates in-place such that each unique element appears only once.
@@ -20,26 +20,7 @@ func removeDuplicates(nums []int) int {
 // On each day, you may decide to buy and/or sell the stock. You can only hold at most one share of the stock at any time. However, you can buy it then immediately sell it on the same day.
 // Find and return the maximum profit you can achieve. 0 <= prices[i] <= 10^4
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/564/
-func maxProfit(prices []int) int {
-	var (
-		profit int
-		bought int = 1e6 // all prices are lower
-	)
-	// buy on valley, sell on peak
-	for i := range prices {
-		if prices[i] < bought {
-			bought = prices[i]
-		} else if bought < prices[i] && (i == len(prices)-1 || prices[i+1] < prices[i]) {
-			profit += prices[i] - bought
-			bought = 1e6 // just for correct compare operation
-		}
-	}
-	return profit
-}
-
-func maxProfit2(prices []int) int {
-	// another realization, buy/sell stocks each day the cost increases
-	profit := 0
+func maxProfit(prices []int) (profit int) {
 	for i := 1; i < len(prices); i++ {
 		if prices[i] > prices[i-1] {
 			profit += prices[i] - prices[i-1]
@@ -54,12 +35,7 @@ func maxProfit2(prices []int) int {
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/646/
 func rotate(nums []int, k int) {
 	k = k % len(nums) // throw period away
-	shift := make([]int, k)
-	copy(shift, nums[len(nums)-k:])
-
-	for i := len(nums) - len(shift) - 1; i >= 0; i-- {
-		nums[i+len(shift)] = nums[i]
-	}
+	shift := append(nums[len(nums)-k:], nums[:len(nums)-k]...)
 	copy(nums, shift)
 }
 
@@ -107,10 +83,9 @@ func containsDuplicate(nums []int) bool {
 // Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.
 // * You must implement a solution with a linear runtime complexity and use only constant extra space.
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/549/
-func singleNumber(nums []int) int {
-	res := 0
+func singleNumber(nums []int) (res int) {
 	for i := range nums {
-		res ^= nums[i]
+		res ^= nums[i] // xor, all bit pairs will give 0
 	}
 	return res
 }

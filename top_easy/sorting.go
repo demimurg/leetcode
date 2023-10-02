@@ -1,4 +1,4 @@
-package leetcode
+package top_easy
 
 // You are given two integer arrays nums1 and nums2, sorted in non-decreasing order, and two integers m and n, representing the number of elements in nums1 and nums2 respectively.
 // Merge nums1 and nums2 into a single array sorted in non-decreasing order.
@@ -31,14 +31,15 @@ func merge(nums1 []int, m int, nums2 []int, n int) {
  *			          false if current version is good
  * func isBadVersion(version int) bool;
  */
-// func firstBadVersion(n int) int {
-//    m := 0
-//    for n - m > 1 {
-//        if mid := (m + n) / 2; isBadVersion(mid) {
-//            n = mid
-//        } else {
-//            m = mid
-//        }
-//    }
-//    return n
-// }
+func firstBadVersion(n int) int {
+	m := 0
+	for n-m > 1 {
+		if mid := (m + n) / 2; isBadVersion(mid) {
+			n = mid
+		} else {
+			m = mid
+		}
+	}
+	return n
+}
+func isBadVersion(version int) bool { return false }
