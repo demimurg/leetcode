@@ -1,4 +1,4 @@
-module leetcode
+module top_easy
 
 go 1.17
 

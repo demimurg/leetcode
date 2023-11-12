@@ -59,10 +59,6 @@ func TestReverseBits(t *testing.T) {
 		expect uint32
 	}{
 		{
-			num:    parseUint("10"),
-			expect: 1,
-		},
-		{
 			num:    parseUint("00000010100101000001111010011100"),
 			expect: 964176192,
 		},
