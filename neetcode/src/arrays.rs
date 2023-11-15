@@ -138,8 +138,8 @@ pub fn top_k_frequent_heap(nums: Vec<i32>, k: i32) -> Vec<i32> {
 
 /// Given an integer array nums, return an array answer such that each element at index i of the answer
 /// is the product of all the numbers in the original array except the one at i
-/// [MEDIUM] https://leetcode.com/problems/product-of-array-except-self
 /// Note: Please solve it without division and in O(n).
+/// [MEDIUM] https://leetcode.com/problems/product-of-array-except-self
 /// ```
 /// use neetcode::arrays::product_except_self;
 /// assert_eq!(product_except_self(vec![1,2,3,4]), vec![24,12,8,6]);
@@ -162,3 +162,91 @@ pub fn product_except_self(nums: Vec<i32>) -> Vec<i32> {
     product
 }
 
+/// Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
+/// 1. Each row must contain the digits 1-9 without repetition.
+/// 2. Each column must contain the digits 1-9 without repetition.
+/// 3. Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
+/// Note:
+/// - A Sudoku board (partially filled) could be valid but is not necessarily solvable.
+/// - Only the filled cells need to be validated according to the mentioned rules.
+/// [MEDIUM] https://leetcode.com/problems/product-of-array-except-self
+/// ```
+/// use neetcode::arrays::is_valid_sudoku;
+/// let mut board = vec![
+///     vec!['5','3','.','.','7','.','.','.','.'],
+///     vec!['6','.','.','1','9','5','.','.','.'],
+///     vec!['.','9','8','.','.','.','.','6','.'],
+///     vec!['8','.','.','.','6','.','.','.','3'],
+///     vec!['4','.','.','8','.','3','.','.','1'],
+///     vec!['7','.','.','.','2','.','.','.','6'],
+///     vec!['.','6','.','.','.','.','2','8','.'],
+///     vec!['.','.','.','4','1','9','.','.','5'],
+///     vec!['.','.','.','.','8','.','.','7','9']
+/// ];
+/// assert!(is_valid_sudoku(board));
+/// // Same as Example 1, except with the 5 in the top left corner being modified to 8.
+/// // Since there are two 8's in the top left 3x3 sub-box, it is invalid
+/// let board = vec![
+///    vec!['8','3','.','.','7','.','.','.','.'],
+///    vec!['6','.','.','1','9','5','.','.','.'],
+///    vec!['.','9','8','.','.','.','.','6','.'],
+///    vec!['8','.','.','.','6','.','.','.','3'],
+///    vec!['4','.','.','8','.','3','.','.','1'],
+///    vec!['7','.','.','.','2','.','.','.','6'],
+///    vec!['.','6','.','.','.','.','2','8','.'],
+///    vec!['.','.','.','4','1','9','.','.','5'],
+///    vec!['.','.','.','.','8','.','.','7','9']
+/// ];
+/// assert!(!is_valid_sudoku(board));
+/// ```
+pub fn is_valid_sudoku(board: Vec<Vec<char>>) -> bool {
+    let mut rows = HashSet::new();
+    let mut cols = HashSet::new();
+    let mut boxes = HashSet::new();
+
+    for i in 0..9 {
+        for j in 0..9 {
+            let ch = board[i][j];
+            if ch == '.' {
+                continue;
+            }
+
+            let box_id = i / 3 * 3 + j / 3;
+            if !rows.insert((i, ch)) || !cols.insert((j, ch)) || !boxes.insert((box_id, ch)) {
+                return false;
+            }
+        }
+    }
+
+    true
+}
+
+/// Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence.
+/// You must write an algorithm that runs in O(n) time.
+/// [MEDIUM] https://leetcode.com/problems/longest-consecutive-sequence
+/// ```
+/// use neetcode::arrays::longest_consecutive;
+/// assert_eq!(longest_consecutive(vec![100, 4, 200, 1, 3, 2]), 4); // longest [1, 2, 3, 4] (4 elems)
+/// assert_eq!(longest_consecutive(vec![0,3,7,2,5,8,4,6,0,1]), 9); // longest [0, 1, 2, 3, 4, 5, 6, 7, 8] (9 elems)
+/// ```
+pub fn longest_consecutive(nums: Vec<i32>) -> i32 {
+    let set: HashSet<i32> = nums.into_iter().collect();
+    let mut max_seq = 0;
+
+    for n in &set {
+        if set.contains(&(n - 1)) {
+            continue;
+        }
+
+        let mut seq = 1;
+        let mut next = n + 1;
+        while set.contains(&next) {
+            seq += 1;
+            next += 1;
+        }
+
+        max_seq = max_seq.max(seq);
+    }
+
+    max_seq
+}
