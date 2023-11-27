@@ -1,7 +1,6 @@
-use neetcode::stack::*;
-use std::thread;
-use std::time::Duration;
+use neetcode::two_pointers::three_sum;
+
 
 fn main() {
-    daily_temperatures(vec![30, 40, 50, 60]);
+    assert_eq!(three_sum(vec![-1,0,1,2,-1,-4]), vec![vec![-1,-1,2], vec![-1,0,1]]);
 }
