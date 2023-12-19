@@ -1,6 +1,8 @@
-use neetcode::two_pointers::three_sum;
-
 
 fn main() {
-    assert_eq!(three_sum(vec![-1,0,1,2,-1,-4]), vec![vec![-1,-1,2], vec![-1,0,1]]);
+    let x = 5;
+    let y = Box::new(x);
+
+    assert_eq!(5, x);
+    assert_eq!(5, *y);
 }
