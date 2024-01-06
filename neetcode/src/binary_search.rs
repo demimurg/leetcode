@@ -1,6 +1,6 @@
 use std::{cmp::Ordering, collections::HashMap};
 
-/// Given a sorted (in ascending order) integer array `nums` of `n` elements and a `target` value, 
+/// Given a sorted (in ascending order) integer array `nums` of `n` elements and a `target` value,
 /// write a function to search `target` in `nums`. If `target` exists, then return its index, otherwise return `-1`.
 /// [EASY] https://leetcode.com/problems/binary-search/
 /// ```
@@ -15,8 +15,8 @@ pub fn search(nums: Vec<i32>, target: i32) -> i32 {
     while l <= r {
         let i = (l + r) / 2;
         match nums[i as usize].cmp(&target) {
-            Ordering::Greater => r = i-1,
-            Ordering::Less => l = i+1,
+            Ordering::Greater => r = i - 1,
+            Ordering::Less => l = i + 1,
             Ordering::Equal => return i as i32,
         }
     }
@@ -48,23 +48,23 @@ pub fn search_matrix(matrix: Vec<Vec<i32>>, target: i32) -> bool {
         row_n = up + (down - up) / 2;
         if matrix[row_n as usize][0] > target {
             down = row_n - 1;
-        } else if  *matrix[row_n as usize].last().unwrap() < target {
+        } else if *matrix[row_n as usize].last().unwrap() < target {
             up = row_n + 1;
         } else {
             break;
         }
     }
     if up > down {
-        return false
+        return false;
     }
-    
+
     let row = &matrix[row_n as usize];
     let (mut l, mut r) = (0, row.len() as i32 - 1);
     while l <= r {
         let i = (l + r) / 2;
         match row[i as usize].cmp(&target) {
-            Ordering::Greater => r = i-1,
-            Ordering::Less => l = i+1,
+            Ordering::Greater => r = i - 1,
+            Ordering::Less => l = i + 1,
             Ordering::Equal => return true,
         }
     }
@@ -88,14 +88,17 @@ pub fn min_eating_speed(piles: Vec<i32>, hours_available: i32) -> i32 {
     let mut min_speed = to_speed;
     while from_speed <= to_speed {
         let speed = (from_speed + to_speed) / 2;
-        let hours: i64 = piles.iter().map(|&bananas| ((bananas + speed - 1) / speed) as i64).sum();
+        let hours: i64 = piles
+            .iter()
+            .map(|&bananas| ((bananas + speed - 1) / speed) as i64)
+            .sum();
 
         match hours.cmp(&(hours_available as i64)) {
             Ordering::Greater => from_speed = speed + 1,
             Ordering::Less | Ordering::Equal => {
                 min_speed = min_speed.min(speed);
                 to_speed = speed - 1;
-            },
+            }
         }
     }
     min_speed
@@ -119,7 +122,7 @@ pub fn min_eating_speed(piles: Vec<i32>, hours_available: i32) -> i32 {
 /// assert_eq!(find_min(vec![1,2]), 1);
 /// ```
 pub fn find_min(nums: Vec<i32>) -> i32 {
-    let (mut l, mut r) = (0, nums.len()-1);
+    let (mut l, mut r) = (0, nums.len() - 1);
     if nums[l] < nums[r] {
         return nums[l];
     }
@@ -136,10 +139,10 @@ pub fn find_min(nums: Vec<i32>) -> i32 {
 }
 
 /// There is an integer array nums sorted in ascending order (with distinct values).
-/// Prior to being passed to your function, nums is possibly rotated at an unknown pivot index k 
+/// Prior to being passed to your function, nums is possibly rotated at an unknown pivot index k
 /// (1 <= k < nums.length) such that the resulting array is [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]] (0-indexed).
 /// For example, [0,1,2,4,5,6,7] might be rotated at pivot index 3 and become [4,5,6,7,0,1,2].
-/// Given the array nums after the possible rotation and an integer target, return the index of target if it is in nums, 
+/// Given the array nums after the possible rotation and an integer target, return the index of target if it is in nums,
 /// or -1 if it is not in nums.
 /// You must write an algorithm with O(log n) runtime complexity.
 /// [MEDIUM] https://leetcode.com/problems/search-in-rotated-sorted-array/
@@ -188,19 +191,24 @@ pub fn search_rotated_array(nums: Vec<i32>, target: i32) -> i32 {
 /// assert_eq!(time_map.get("foo".to_string(), 1), "bar".to_string());
 /// assert_eq!(time_map.get("foo".to_string(), 3), "bar".to_string());
 /// time_map.set("foo".to_string(), "bar2".to_string(), 4);
-/// assert_eq!(time_map.get("foo".to_string(), 4), "bar2".to_string()); 
+/// assert_eq!(time_map.get("foo".to_string(), 4), "bar2".to_string());
 /// assert_eq!(time_map.get("foo".to_string(), 5), "bar2".to_string());
 /// ```
 pub struct TimeMap {
-    storage: HashMap<String,Vec<(i32, String)>>
+    storage: HashMap<String, Vec<(i32, String)>>,
 }
 impl TimeMap {
     pub fn new() -> Self {
-        TimeMap{storage: HashMap::new()}
+        TimeMap {
+            storage: HashMap::new(),
+        }
     }
 
     pub fn set(&mut self, key: String, value: String, timestamp: i32) {
-        self.storage.entry(key).or_default().push((timestamp, value));
+        self.storage
+            .entry(key)
+            .or_default()
+            .push((timestamp, value));
     }
 
     pub fn get(&self, key: String, timestamp: i32) -> String {
@@ -208,7 +216,7 @@ impl TimeMap {
         if values.is_none() {
             return String::new();
         }
-        
+
         let values = values.unwrap();
         let mut nearest_value = String::new();
         let (mut l, mut r) = (0, values.len());
@@ -221,7 +229,7 @@ impl TimeMap {
                 r = m;
             }
         }
-        
+
         nearest_value
     }
 }

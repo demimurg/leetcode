@@ -1,8 +1,8 @@
+use neetcode::sliding_window::check_inclusion;
 
 fn main() {
-    let x = 5;
-    let y = Box::new(x);
-
-    assert_eq!(5, x);
-    assert_eq!(5, *y);
+    println!(
+        "{}",
+        check_inclusion(String::from("ab"), String::from("eidbaooo"))
+    )
 }

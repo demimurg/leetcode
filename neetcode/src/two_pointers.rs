@@ -49,7 +49,7 @@ pub fn two_sum(numbers: Vec<i32>, target: i32) -> Vec<i32> {
         match (numbers[l] + numbers[r]).cmp(&target) {
             Ordering::Greater => r -= 1,
             Ordering::Less => l += 1,
-            _ => return vec![l as i32+1, r as i32 +1],
+            _ => return vec![l as i32 + 1, r as i32 + 1],
         }
     }
 }
@@ -62,22 +62,22 @@ pub fn two_sum(numbers: Vec<i32>, target: i32) -> Vec<i32> {
 /// assert_eq!(three_sum(vec![0,0,0]), vec![vec![0,0,0]]);
 /// assert_eq!(three_sum(vec![-2,0,0,2,2]), vec![vec![-2,0,2]]);
 /// ```
-pub fn three_sum(mut nums: Vec<i32>) -> Vec<Vec<i32>>{
+pub fn three_sum(mut nums: Vec<i32>) -> Vec<Vec<i32>> {
     nums.sort_unstable();
 
     let mut res = Vec::new();
-    for i in 0..nums.len()-2 {
+    for i in 0..nums.len() - 2 {
         if nums[i] > 0 {
             // numbers after i will be bigger than 0, because of sort
             // so we never find pair with sum equals to -nums[i]
             break;
         }
-        if i > 0 && nums[i] == nums[i-1] {
+        if i > 0 && nums[i] == nums[i - 1] {
             // for same 1st number we will get same 2nd and 3rd, but we don't need duplicates
             continue;
         }
 
-        let (mut l, mut r) = (i+1, nums.len() - 1);
+        let (mut l, mut r) = (i + 1, nums.len() - 1);
         while l < r {
             match (nums[l] + nums[r]).cmp(&(-nums[i])) {
                 Ordering::Less => l += 1,
@@ -89,7 +89,7 @@ pub fn three_sum(mut nums: Vec<i32>) -> Vec<Vec<i32>>{
                     }
                     l += 1;
                     r -= 1;
-                },
+                }
             }
         }
     }
@@ -108,7 +108,7 @@ pub fn three_sum(mut nums: Vec<i32>) -> Vec<Vec<i32>>{
 /// assert_eq!(max_area(vec![1,1]), 1);
 /// ```
 pub fn max_area(height: Vec<i32>) -> i32 {
-    let (mut l, mut r) = (0, height.len()-1);
+    let (mut l, mut r) = (0, height.len() - 1);
     let mut last_max = 0;
 
     while l < r {
@@ -117,11 +117,11 @@ pub fn max_area(height: Vec<i32>) -> i32 {
 
         match height[l].cmp(&height[r]) {
             Ordering::Less => l += 1,
-            Ordering::Greater =>  r -= 1,
+            Ordering::Greater => r -= 1,
             Ordering::Equal => {
                 l += 1;
                 r -= 1;
-            },
+            }
         }
     }
 
