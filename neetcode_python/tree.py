@@ -78,7 +78,35 @@ def max_depth(root: Optional[TreeNode]) -> int:
     >>> max_depth(list_to_tree([]))
     0
     """
-    return 1 + max(max_depth(root.left), max_depth(root.right)) if root else None
+    return 1 + max(max_depth(root.left), max_depth(root.right)) if root else 0
+
+
+def diameter_of_binary_tree(root: Optional[TreeNode]) -> int:
+    """
+    Given the root of a binary tree, return the length of the diameter of the tree.
+    The diameter of a binary tree is the length of the longest path between any two nodes in a tree.
+    This path may or may not pass through the root.
+    The length of a path between two nodes is represented by the number of edges between them.
+
+    >>> diameter_of_binary_tree(list_to_tree([1,2,3,4,5]))
+    3
+    >>> diameter_of_binary_tree(list_to_tree([1,2]))
+    1
+    """
+    max_path = 0
+
+    def dfs(node: Optional[TreeNode]):
+        if not node:
+            return 0
+        left_depth = dfs(node.left)
+        right = dfs(node.right)
+        nonlocal max_path
+        max_path = max(max_path, left_depth + right)
+
+        return 1 + max(left_depth, right)
+
+    dfs(root)
+    return max_path
 
 
 if __name__ == "__main__":
