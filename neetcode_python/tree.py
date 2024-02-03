@@ -95,7 +95,7 @@ def diameter_of_binary_tree(root: Optional[TreeNode]) -> int:
     """
     max_path = 0
 
-    def dfs(node: Optional[TreeNode]):
+    def dfs(node: Optional[TreeNode]) -> int:
         if not node:
             return 0
         left_depth = dfs(node.left)
@@ -107,6 +107,72 @@ def diameter_of_binary_tree(root: Optional[TreeNode]) -> int:
 
     dfs(root)
     return max_path
+
+
+def is_balanced(root: Optional[TreeNode]) -> bool:
+    """
+    Given a binary tree, determine if it is height-balanced
+
+    >>> is_balanced(list_to_tree([3,9,20,None,None,15,7]))
+    True
+    >>> is_balanced(list_to_tree([1,2,2,3,3,None,None,4,4]))
+    False
+    >>> is_balanced(list_to_tree([]))
+    True
+    """
+    root_balanced = True
+
+    def dfs(node: Optional[TreeNode]) -> int:
+        if not node:
+            return 0
+        depth_left = dfs(node.left)
+        depth_right = dfs(node.right)
+
+        nonlocal root_balanced
+        if abs(depth_left - depth_right) > 1:
+            root_balanced = False
+
+        return 1 + max(depth_left, depth_right)
+
+    dfs(root)
+    return root_balanced
+
+
+def is_same_tree(p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+    """
+    Given the roots of two binary trees p and q, write a function to check if they are the same or not.
+    Two binary trees are considered the same if they are structurally identical, and the nodes have the same value.
+
+    >>> is_same_tree(list_to_tree([1,2,3]), list_to_tree([1,2,3]))
+    True
+    >>> is_same_tree(list_to_tree([1,2]), list_to_tree([1,None,2]))
+    False
+    >>> is_same_tree(list_to_tree([1,2,1]), list_to_tree([1,1,2]))
+    False
+    """
+    return (p is None and q is None) or \
+        p is not None and q is not None and p.val == q.val and \
+        is_same_tree(p.left, q.left) and \
+        is_same_tree(p.right, q.right)
+
+
+def is_subtree(root: Optional[TreeNode], sub_root: Optional[TreeNode]) -> bool:
+    """
+    Given the roots of two binary trees root and subRoot, return true if there is a subtree
+    of root with the same structure and node values of subRoot and false otherwise.
+    A subtree of a binary tree tree is a tree that consists of a node in tree and all of this node's descendants.
+    The tree tree could also be considered as a subtree of itself.
+
+    >>> is_subtree(list_to_tree([3,4,5,1,2]), list_to_tree([4,1,2]))
+    True
+    >>> is_subtree(list_to_tree([3,4,5,1,2,None,None,None,None,0]), list_to_tree([4,1,2]))
+    False
+    """
+    if root is None:
+        return False
+    return is_same_tree(root, sub_root) \
+        or is_subtree(root.left, sub_root) \
+        or is_subtree(root.right, sub_root)
 
 
 if __name__ == "__main__":
