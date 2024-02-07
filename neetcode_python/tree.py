@@ -175,6 +175,31 @@ def is_subtree(root: Optional[TreeNode], sub_root: Optional[TreeNode]) -> bool:
         or is_subtree(root.right, sub_root)
 
 
+def lowest_common_ancestor(root: TreeNode, p: int, q: int) -> int:
+    """
+    Given a binary search tree (BST), find the lowest common ancestor (LCA) node of two given nodes in the BST.
+    According to the definition of LCA on Wikipedia: “The lowest common ancestor is defined between two nodes p and q
+    as the lowest node in T that has both p and q as descendants (where we allow a node to be a descendant of itself).”
+    [MEDIUM] https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+
+    >>> lowest_common_ancestor(list_to_tree([6,2,8,0,4,7,9,None,None,3,5]), 2, 8)
+    6
+    >>> lowest_common_ancestor(list_to_tree([6,2,8,0,4,7,9,None,None,3,5]), 2, 4)
+    2
+    >>> lowest_common_ancestor(list_to_tree([2,1]), 2, 1)
+    2
+    """
+    if p > q:
+        p, q = q, p
+    while True:
+        if p > root.val:
+            root = root.right
+        elif q < root.val:
+            root = root.left
+        else:
+            return root.val
+
+
 if __name__ == "__main__":
     import doctest
 
