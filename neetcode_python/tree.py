@@ -200,6 +200,57 @@ def lowest_common_ancestor(root: TreeNode, p: int, q: int) -> int:
             return root.val
 
 
+def level_order(root: Optional[TreeNode]) -> List[List[int]]:
+    """
+    Given the root of a binary tree, return the level order traversal of its nodes' values.
+    (i.e., from left to right, level by level).
+    [MEDIUM] https://leetcode.com/problems/binary-tree-level-order-traversal/
+
+    >>> level_order(list_to_tree([3,9,20,None,None,15,7]))
+    [[3], [9, 20], [15, 7]]
+    >>> level_order(list_to_tree([1]))
+    [[1]]
+    >>> level_order(list_to_tree([]))
+    []
+    """
+    lis: List[List[int]] = []
+
+    def add_vals(node: Optional[TreeNode], level: int) -> None:
+        if node is None:
+            return
+
+        nonlocal lis
+        if len(lis) < level + 1:
+            lis.append([])
+        lis[level].append(node.val)
+        add_vals(node.left, level + 1)
+        add_vals(node.right, level + 1)
+
+    add_vals(root, 0)
+    return lis
+
+
+def level_order_no_recursion(root: Optional[TreeNode]) -> List[List[int]]:
+    queue = deque([root] if root is not None else [])
+    lis: List[List[int]] = []
+
+    while len(queue) > 0:
+        level = []
+
+        # iterate over values for current level, don't touch newly added
+        for _ in range(len(queue)):
+            node = queue.popleft()
+            level.append(node.val)
+            if node.left is not None:
+                queue.append(node.left)
+            if node.right is not None:
+                queue.append(node.right)
+
+        lis.append(level)
+
+    return lis
+
+
 if __name__ == "__main__":
     import doctest
 
