@@ -283,7 +283,49 @@ def right_side_view(root: Optional[TreeNode]) -> List[int]:
     return right_side
 
 
+def good_nodes(node: TreeNode, cur_max=-pow(10, 4)) -> int:
+    """
+    Given a binary tree root, a node X in the tree is named good if in the path from root to X there are no nodes
+    with a value greater than X. Return the number of good nodes in the binary tree.
+    [MEDIUM] https://leetcode.com/problems/count-good-nodes-in-binary-tree/
+
+    >>> good_nodes(list_to_tree([3,1,4,3,None,1,5]))
+    4
+    >>> good_nodes(list_to_tree([3,3,None,4,2]))
+    3
+    >>> good_nodes(list_to_tree([1]))
+    1
+    """
+    if node is None:
+        return 0
+    cur_max = max(node.val, cur_max)
+    return (1 if node.val == cur_max else 0) + \
+        good_nodes(node.left, cur_max) + \
+        good_nodes(node.right, cur_max)
+
+
+def is_valid_bst(root: Optional[TreeNode], low=-float("inf"), high=float("inf")) -> bool:
+    """
+    Given the root of a binary tree, determine if it is a valid binary search tree (BST).
+    A valid BST is defined as follows:
+    - The left subtree of a node contains only nodes with keys less than the node's key.
+    - The right subtree of a node contains only nodes with keys greater than the node's key.
+    - Both the left and right subtrees must also be binary search trees.
+    [MEDIUM] https://leetcode.com/problems/validate-binary-search-tree/
+
+    >>> is_valid_bst(list_to_tree([2,1,3]))
+    True
+    >>> is_valid_bst(list_to_tree([5,1,4,None,None,3,6]))
+    False
+    """
+    if root is None:
+        return True
+    return low < root.val < high and \
+        is_valid_bst(root.left, low, root.val) and \
+        is_valid_bst(root.right, root.val, high)
+
+
 if __name__ == "__main__":
     import doctest
 
-    doctest.testmod()
+doctest.testmod()
