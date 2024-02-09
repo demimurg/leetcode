@@ -251,6 +251,38 @@ def level_order_no_recursion(root: Optional[TreeNode]) -> List[List[int]]:
     return lis
 
 
+def right_side_view(root: Optional[TreeNode]) -> List[int]:
+    """
+    Given the root of a binary tree, imagine yourself standing on the right side of it, return the values
+    of the nodes you can see ordered from top to bottom.
+    [MEDIUM] https://leetcode.com/problems/binary-tree-right-side-view/
+
+    >>> right_side_view(list_to_tree([1,2,3,None,5,None,4]))
+    [1, 3, 4]
+    >>> right_side_view(list_to_tree([1,None,3]))
+    [1, 3]
+    >>> right_side_view(list_to_tree([]))
+    []
+    """
+    if root is None:
+        return []
+    cur_level = [root]
+    right_side = []
+
+    while len(cur_level) > 0:
+        right_side.append(cur_level[-1].val)
+
+        next_level = []
+        for node in cur_level:
+            if node.left is not None:
+                next_level.append(node.left)
+            if node.right is not None:
+                next_level.append(node.right)
+        cur_level = next_level
+
+    return right_side
+
+
 if __name__ == "__main__":
     import doctest
 
