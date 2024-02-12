@@ -325,6 +325,31 @@ def is_valid_bst(root: Optional[TreeNode], low=-float("inf"), high=float("inf"))
         is_valid_bst(root.right, root.val, high)
 
 
+def kth_smallest(node: Optional[TreeNode], k: int) -> int:
+    """
+    Given the root of a binary search tree, and an integer k, return the kth smallest value (1-indexed) of all the
+    values of the nodes in the tree.
+    [MEDIUM] https://leetcode.com/problems/kth-smallest-element-in-a-bst/
+
+    >>> kth_smallest(list_to_tree([3,1,4,None,2]), 1)
+    1
+    >>> kth_smallest(list_to_tree([5,3,6,2,4,None,None,1]), 3)
+    3
+    """
+    stack = []
+    while node is not None or len(stack) > 0:
+        while node is not None:
+            stack.append(node)
+            node = node.left
+
+        node = stack.pop()
+        k -= 1
+        if k == 0:
+            return node.val
+        node = node.right
+    return -1
+
+
 if __name__ == "__main__":
     import doctest
 
