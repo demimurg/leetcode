@@ -353,4 +353,4 @@ def kth_smallest(node: Optional[TreeNode], k: int) -> int:
 if __name__ == "__main__":
     import doctest
 
-doctest.testmod()
+    doctest.testmod()
