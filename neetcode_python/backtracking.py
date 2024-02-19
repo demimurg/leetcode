@@ -51,6 +51,40 @@ def combination_sum(candidates: List[int], target: int) -> List[List[int]]:
     return result
 
 
+def permute(nums: List[int]) -> List[List[int]]:
+    """
+    Given an array nums of distinct integers, return all the possible permutations.
+    You can return the answer in any order.
+    [MEDIUM] https://leetcode.com/problems/permutations/
+
+    >>> permute([1, 2, 3])
+    [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
+    >>> permute([0, 1])
+    [[0, 1], [1, 0]]
+    >>> permute([1])
+    [[1]]
+    """
+    result, perm, perm_set = [], [], set([])
+
+    def backtrack():
+        if len(perm) == len(nums):
+            result.append(perm.copy())
+            return
+
+        for num in nums:
+            if num in perm_set:
+                continue
+
+            perm.append(num)
+            perm_set.add(num)
+            backtrack()
+            perm.pop()
+            perm_set.remove(num)
+
+    backtrack()
+    return result
+
+
 if __name__ == "__main__":
     import doctest
 
