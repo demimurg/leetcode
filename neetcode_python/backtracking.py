@@ -103,6 +103,39 @@ def subsets_with_dup(nums: List[int]) -> List[List[int]]:
     return subs
 
 
+def combination_sum2(candidates: List[int], target: int) -> List[List[int]]:
+    """
+    Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations
+    in candidates where the candidate numbers sum to target. Each number in candidates may only be used once in
+    the combination. Note: The solution set must not contain duplicate combinations.
+    [MEDIUM] https://leetcode.com/problems/combination-sum-ii/
+
+    >>> combination_sum2([10,1,2,7,6,1,5], 8)
+    [[1, 1, 6], [1, 2, 5], [1, 7], [2, 6]]
+    >>> combination_sum2([2,5,2,1,2], 5)
+    [[1, 2, 2], [5]]
+    """
+    candidates.sort()
+    result = []
+
+    def dfs(nums: List[int], nums_sum: int, i: int, last_added=False):
+        if nums_sum == target:
+            result.append(nums.copy())
+            return
+        if i == len(candidates) or nums_sum > target:
+            return
+
+        same_skipped = not last_added and i > 0 and candidates[i] == candidates[i - 1]
+        if not same_skipped:
+            nums.append(candidates[i])
+            dfs(nums, nums_sum + candidates[i], i + 1, last_added=True)
+            nums.pop()
+        dfs(nums, nums_sum, i + 1)
+
+    dfs([], 0, 0)
+    return result
+
+
 if __name__ == "__main__":
     import doctest
 
