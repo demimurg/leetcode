@@ -58,31 +58,49 @@ def permute(nums: List[int]) -> List[List[int]]:
     [MEDIUM] https://leetcode.com/problems/permutations/
 
     >>> permute([1, 2, 3])
-    [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
+    [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 2, 1], [3, 1, 2]]
     >>> permute([0, 1])
     [[0, 1], [1, 0]]
     >>> permute([1])
     [[1]]
     """
-    result, perm, perm_set = [], [], set([])
+    res = []
 
-    def backtrack():
-        if len(perm) == len(nums):
-            result.append(perm.copy())
-            return
+    def backtrack(i):
+        if i == len(nums):
+            res.append(nums[:])
 
-        for num in nums:
-            if num in perm_set:
-                continue
+        for j in range(i, len(nums)):
+            nums[i], nums[j] = nums[j], nums[i]
+            backtrack(i + 1)
+            nums[i], nums[j] = nums[j], nums[i]
 
-            perm.append(num)
-            perm_set.add(num)
-            backtrack()
-            perm.pop()
-            perm_set.remove(num)
+    backtrack(0)
+    return res
 
-    backtrack()
-    return result
+
+def subsets_with_dup(nums: List[int]) -> List[List[int]]:
+    """
+    Given an integer array nums that may contain duplicates, return all possible subsets (the power set).
+    The solution set must not contain duplicate subsets. Return the solution in any order.
+    [MEDIUM] https://leetcode.com/problems/subsets-ii/
+
+    >>> subsets_with_dup([1, 2, 2])
+    [[], [1], [2], [1, 2], [2, 2], [1, 2, 2]]
+    >>> subsets_with_dup([0])
+    [[], [0]]
+    """
+    nums.sort()
+    subs = [[]]
+    end = 0
+    for i in range(len(nums)):
+        same_num = i > 0 and nums[i] == nums[i - 1]
+        start = 0 if not same_num else end  # skip duplicates
+        end = len(subs)
+        for j in range(start, end):
+            subs.append(subs[j] + [nums[i]])
+
+    return subs
 
 
 if __name__ == "__main__":

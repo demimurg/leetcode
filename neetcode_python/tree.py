@@ -51,7 +51,7 @@ def list_to_tree(lis: List[Optional[int]]) -> Optional[TreeNode]:
 def invert_tree(root: Optional[TreeNode]) -> Optional[TreeNode]:
     """
     Given the root of a binary tree, invert the tree, and return its root.
-    
+
     >>> tree_to_list(invert_tree(list_to_tree([4, 2, 7, 1, 3, 6, 9])))
     [4, 7, 2, 9, 6, 3, 1]
     >>> tree_to_list(invert_tree(list_to_tree([2, 1, 3])))
@@ -72,7 +72,7 @@ def max_depth(root: Optional[TreeNode]) -> int:
     Given the root of a binary tree, return its maximum depth.
     A binary tree's maximum depth is the number of nodes along the longest path
     from the root node down to the farthest leaf node.
-    
+
     >>> max_depth(list_to_tree([3,9,20,None,None,15,7]))
     3
     >>> max_depth(list_to_tree([]))
