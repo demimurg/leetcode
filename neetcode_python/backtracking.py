@@ -136,6 +136,49 @@ def combination_sum2(candidates: List[int], target: int) -> List[List[int]]:
     return result
 
 
+def exist(board: List[List[str]], word: str) -> bool:
+    """
+    Given an m x n grid of characters board and a string word, return true if word exists in the grid.
+    The word can be constructed from letters of sequentially adjacent cells, where adjacent cells are
+    horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+    [MEDIUM] https://leetcode.com/problems/word-search/
+
+    >>> exist([["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "ABCCED")
+    True
+    >>> exist([["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "SEE")
+    True
+    >>> exist([["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "ABCB")
+    False
+    """
+    rows, cols = len(board), len(board[0])
+    matched = set()
+
+    def dfs(r: int, c: int, n: int) -> bool:
+        if n == len(word):
+            return True
+        if r < 0 or r >= rows or c < 0 or c >= cols:
+            return False
+        char_idx = (r, c)
+        if char_idx in matched or board[r][c] != word[n]:
+            return False
+
+        matched.add(char_idx)
+        found = dfs(r + 1, c, n + 1) or \
+            dfs(r - 1, c, n + 1) or \
+            dfs(r, c + 1, n + 1) or \
+            dfs(r, c - 1, n + 1)
+        matched.remove(char_idx)
+        return found
+
+    for row in range(len(board)):
+        for col in range(len(board[row])):
+            if dfs(row, col, 0):
+                return True
+
+    return False
+
+
 if __name__ == "__main__":
     import doctest
 
