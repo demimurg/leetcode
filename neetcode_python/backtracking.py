@@ -214,7 +214,52 @@ def is_palindrom(s: str, i: int, j: int) -> bool:
     return True
 
 
+def letter_combinations(digits: str) -> List[str]:
+    """
+    Given a string of digits from 2 to 9, return all possible letter combinations that the number could
+    represent when mapped to letters on a telephone keypad. The mapping is similar to that of a
+    conventional phone's buttons. This function returns the combinations in any order, and note that
+    digit '1' does not map to any letters.
+
+    [MEDIUM] https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+
+    >>> letter_combinations("23")
+    ['ad', 'ae', 'af', 'bd', 'be', 'bf', 'cd', 'ce', 'cf']
+    >>> letter_combinations("")
+    []
+    >>> letter_combinations("2")
+    ['a', 'b', 'c']
+    """
+    if len(digits) == 0:
+        return []
+    combinations, letters = [], []
+
+    def dfs(i: int) -> None:
+        if i == len(digits):
+            combinations.append("".join(letters))
+            return
+
+        for letter in phone[digits[i]]:
+            letters.append(letter)
+            dfs(i + 1)
+            letters.pop()
+
+    dfs(0)
+    return combinations
+
+
+phone = {
+    "2": "abc",
+    "3": "def",
+    "4": "ghi",
+    "5": "jkl",
+    "6": "mno",
+    "7": "pqrs",
+    "8": "tuv",
+    "9": "wxyz",
+}
+
 if __name__ == "__main__":
     import doctest
 
-    doctest.testmod()
+doctest.testmod()
