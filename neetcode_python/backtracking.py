@@ -141,7 +141,6 @@ def exist(board: List[List[str]], word: str) -> bool:
     Given an m x n grid of characters board and a string word, return true if word exists in the grid.
     The word can be constructed from letters of sequentially adjacent cells, where adjacent cells are
     horizontally or vertically neighboring. The same letter cell may not be used more than once.
-
     [MEDIUM] https://leetcode.com/problems/word-search/
 
     >>> exist([["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "ABCCED")
@@ -159,16 +158,14 @@ def exist(board: List[List[str]], word: str) -> bool:
             return True
         if r < 0 or r >= rows or c < 0 or c >= cols:
             return False
-        char_idx = (r, c)
-        if char_idx in matched or board[r][c] != word[n]:
+        char = (r, c)
+        if char in matched or board[r][c] != word[n]:
             return False
 
-        matched.add(char_idx)
-        found = dfs(r + 1, c, n + 1) or \
-            dfs(r - 1, c, n + 1) or \
-            dfs(r, c + 1, n + 1) or \
-            dfs(r, c - 1, n + 1)
-        matched.remove(char_idx)
+        n += 1
+        matched.add(char)
+        found = dfs(r + 1, c, n) or dfs(r - 1, c, n) or dfs(r, c + 1, n) or dfs(r, c - 1, n)
+        matched.remove(char)
         return found
 
     for row in range(len(board)):
@@ -177,6 +174,44 @@ def exist(board: List[List[str]], word: str) -> bool:
                 return True
 
     return False
+
+
+def partition(s: str) -> List[List[str]]:
+    """
+    Given a string s, partition s such that every substring of the partition is a palindrome.
+    Return all possible palindrome partitioning of s.
+    [MEDIUM] https://leetcode.com/problems/palindrome-partitioning/
+
+    >>> partition("aab")
+    [['a', 'a', 'b'], ['aa', 'b']]
+    >>> partition("a")
+    [['a']]
+    """
+    partitions, palindroms = [], []
+
+    def dfs(i: int) -> None:
+        if i == len(s):
+            partitions.append(palindroms.copy())
+            return
+
+        # trying to find palindrom starts from i (i = left, j = right)
+        for j in range(i, len(s)):
+            if is_palindrom(s, i, j):
+                # if we found one, we can discover all futher combinatoin
+                palindroms.append(s[i:j + 1])
+                dfs(j + 1)
+                palindroms.pop()
+
+    dfs(0)
+    return partitions
+
+
+def is_palindrom(s: str, i: int, j: int) -> bool:
+    while i < j:
+        if s[i] != s[j]:
+            return False
+        i, j = i + 1, j - 1
+    return True
 
 
 if __name__ == "__main__":
