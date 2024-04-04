@@ -119,6 +119,34 @@ def longest_palindromic_substring(s: str) -> str:
     return longest
 
 
+def count_palindromic_substrings(s: str) -> int:
+    """
+    Given a string s, return the number of palindromic substrings in it. A substring is
+    palindromic if it reads the same backward as forward, and a substring is a contiguous
+    sequence of characters within the string.
+    [MEDIUM] https://leetcode.com/problems/palindromic-substrings/
+
+    >>> count_palindromic_substrings("abc")
+    3
+    >>> count_palindromic_substrings("aaa")
+    6
+    """
+    count = 0
+    for i in range(len(s)):
+        # odd number of letters
+        for n in range(0, min(i + 1, len(s) - i)):
+            if s[i - n] != s[i + n]:
+                break
+            count += 1
+        # even number of letters
+        for n in range(1, min(i, len(s) - i) + 1):
+            if s[i - n] != s[i + n - 1]:
+                break
+            count += 1
+
+    return count
+
+
 if __name__ == "__main__":
     import doctest
 
