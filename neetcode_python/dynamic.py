@@ -1,3 +1,4 @@
+from collections import deque
 from typing import List
 
 
@@ -80,6 +81,42 @@ def rob2(nums: List[int]) -> int:
     3
     """
     return max(rob(nums[1:]), rob(nums[:-1]))
+
+
+def longest_palindromic_substring(s: str) -> str:
+    """
+    Given a string s, return the longest palindromic substring in s. A palindrome is a
+    word, phrase, number, or other sequence of characters that reads the same forward and
+    backward (ignoring spaces, punctuation, and capitalization).
+    [MEDIUM] https://leetcode.com/problems/longest-palindromic-substring/
+
+    >>> longest_palindromic_substring("babad")
+    'bab'
+    >>> longest_palindromic_substring("cbbd")
+    'bb'
+    >>> longest_palindromic_substring("abababa")
+    'abababa'
+    >>> longest_palindromic_substring("abaaba")
+    'abaaba'
+    >>> longest_palindromic_substring("a")
+    'a'
+    """
+    longest = ""
+    for i in range(len(s)):
+        # odd number of letters
+        for n in range(0, min(i + 1, len(s) - i)):
+            if s[i - n] != s[i + n]:
+                break
+            if 2 * n + 1 > len(longest):
+                longest = s[i - n:i + n + 1]
+        # even number of letters
+        for n in range(1, min(i, len(s) - i) + 1):
+            if s[i - n] != s[i + n - 1]:
+                break
+            if 2 * n > len(longest):
+                longest = s[i - n:i + n]
+
+    return longest
 
 
 if __name__ == "__main__":
