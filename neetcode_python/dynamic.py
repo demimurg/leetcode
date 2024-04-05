@@ -147,6 +147,32 @@ def count_palindromic_substrings(s: str) -> int:
     return count
 
 
+def num_decodings(s: str) -> int:
+    """
+    A message containing letters from A-Z can be encoded into numbers using a given mapping where 'A' -> "1",
+    'B' -> "2", ..., 'Z' -> "26". To decode an encoded message, all the digits must be grouped then mapped back into
+    letters using the reverse of the mapping (there may be multiple ways). For example, "11106" can be decoded into
+    "AAJF" with the grouping (1 1 10 6) or "KJF" with the grouping (11 10 6). Note that grouping like (1 11 06)
+    is invalid because "06" cannot be mapped into 'F'since "6" is different from "06".
+    Given a string s containing only digits, return the number of ways to decode it.
+    [MEDIUM] https://leetcode.com/problems/decode-ways/
+
+    >>> num_decodings("12")
+    2
+    >>> num_decodings("226")
+    3
+    >>> num_decodings("06")
+    0
+    """
+    if len(s) > 0 and s[0] == "0":
+        return 0
+    if len(s) < 2:
+        return 1
+    if (s[0] == "1") or (s[0] == "2" and int(s[1]) < 7):
+        return num_decodings(s[1:]) + num_decodings(s[2:])
+    return num_decodings(s[1:])
+
+
 if __name__ == "__main__":
     import doctest
 
