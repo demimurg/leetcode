@@ -1,4 +1,3 @@
-from collections import deque
 from typing import List
 
 
@@ -164,13 +163,21 @@ def num_decodings(s: str) -> int:
     >>> num_decodings("06")
     0
     """
-    if len(s) > 0 and s[0] == "0":
-        return 0
-    if len(s) < 2:
-        return 1
-    if (s[0] == "1") or (s[0] == "2" and int(s[1]) < 7):
-        return num_decodings(s[1:]) + num_decodings(s[2:])
-    return num_decodings(s[1:])
+    # num decodings plus one and two for current index
+    plus_one, plus_two = 1, 1
+    # iterate from the end
+    for i in range(len(s) - 1, -1, -1):
+        if s[i] == "0":
+            plus_one, plus_two = 0, plus_one
+        elif i < len(s) - 1 and (s[i] == "1" or (s[i] == "2" and int(s[i + 1]) < 7)):
+            # combination of two digits added
+            plus_one, plus_two = plus_one + plus_two, plus_one
+        else:
+            # same number of combinations as before
+            plus_two = plus_one
+
+    # we end on -1 index, so plus one will be zero
+    return plus_one
 
 
 if __name__ == "__main__":
