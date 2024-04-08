@@ -180,6 +180,32 @@ def num_decodings(s: str) -> int:
     return plus_one
 
 
+def coin_change(coins: List[int], amount: int) -> int:
+    """
+    You are given an integer array coins representing coins of different denominations and an integer
+    amount representing a total amount of money. Return the fewest number of coins that you need to
+    make up that amount. If that amount of money cannot be made up by any combination of the coins,
+    return -1. You may assume that you have an infinite number of each kind of coin.
+    [MEDIUM] https://leetcode.com/problems/coin-change/
+
+    >>> coin_change([1, 2, 5], 11)
+    3
+    >>> coin_change([2], 3)
+    -1
+    """
+    min_change = {0: 0}
+    for n in range(1, amount + 1):
+        for coin in coins:
+            min_last = min_change.get(n - coin, 0)
+            if min_last == 0 and coin != n:
+                # can't add to another coins and can't start from it
+                continue
+            if min_last + 1 < min_change.get(n, 1e6):
+                min_change[n] = min_last + 1
+
+    return min_change.get(amount, -1)
+
+
 if __name__ == "__main__":
     import doctest
 
