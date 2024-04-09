@@ -206,6 +206,29 @@ def coin_change(coins: List[int], amount: int) -> int:
     return min_change.get(amount, -1)
 
 
+def max_product(nums: List[int]) -> int:
+    """
+    Given an integer array 'nums', find a subarray that has the largest product, and return the product.
+    The function assumes that the answer will fit in a 32-bit integer.
+    [MEDIUM] https://leetcode.com/problems/maximum-product-subarray/
+
+    # [2, 3, -2, 4]
+    # 2, min=
+
+    >>> max_product([2,3,-2,4])
+    6
+    >>> max_product([-2,0,-1])
+    0
+    """
+    result, cur_min, cur_max = -1e6, 1, 1
+    for n in nums:
+        vals = (cur_max * n, cur_min * n, n)
+        cur_min, cur_max = min(vals), max(vals)
+        result = max(result, cur_max)
+
+    return result
+
+
 if __name__ == "__main__":
     import doctest
 
