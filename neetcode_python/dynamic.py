@@ -229,6 +229,29 @@ def max_product(nums: List[int]) -> int:
     return result
 
 
+def word_break(s: str, word_dict: List[str]) -> bool:
+    """
+    Given a string 's' and a dictionary of strings 'word_dict', return 'true' if 's' can be segmented
+    into a space-separated sequence of one or more dictionary words. It's noted that the same word
+    in the dictionary may be reused multiple times in the segmentation.
+    [MEDIUM] https://leetcode.com/problems/word-break/
+
+    >>> word_break("leetcode", ["leet", "code"])
+    True
+    >>> word_break("applepenapple", ["apple", "pen"])
+    True
+    >>> word_break("catsandog", ["cats", "dog", "sand", "and", "cat"])
+    False
+    """
+    have_solution = {len(s): True}  # key = index, value = is solution found
+    for i in range(len(s) - 1, -1, -1):  # up-down
+        for word in word_dict:
+            if have_solution.get(i + len(word), False) and s.startswith(word, i):
+                have_solution[i] = True
+                break
+    return have_solution.get(0, False)
+
+
 if __name__ == "__main__":
     import doctest
 
