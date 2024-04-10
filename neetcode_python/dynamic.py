@@ -252,6 +252,29 @@ def word_break(s: str, word_dict: List[str]) -> bool:
     return have_solution.get(0, False)
 
 
+def length_of_lis(nums: List[int]) -> int:
+    """
+    Given an integer array 'nums', return the length of the longest strictly increasing subsequence.
+    The function defines a subsequence as a sequence that can be derived from an array by deleting
+    some or no elements without changing the order of the remaining elements.
+    [MEDIUM] https://leetcode.com/problems/longest-increasing-subsequence/
+
+    >>> length_of_lis([10,9,2,5,3,7,101,18])
+    4
+    >>> length_of_lis([0,1,0,3,2,3])
+    4
+    >>> length_of_lis([7,7,7,7,7,7,7])
+    1
+    """
+    seq_len = [1] * len(nums)  # max sequence length for each nums index
+    for i in reversed(range(len(nums))):
+        for j in range(i + 1, len(nums)):
+            if nums[j] > nums[i]:
+                seq_len[i] = max(seq_len[i], 1 + seq_len[j])
+
+    return max(seq_len)
+
+
 if __name__ == "__main__":
     import doctest
 
