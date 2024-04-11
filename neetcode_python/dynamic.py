@@ -275,6 +275,42 @@ def length_of_lis(nums: List[int]) -> int:
     return max(seq_len)
 
 
+def can_partition(nums: List[int]) -> bool:
+    """
+    Given an integer array 'nums', return 'true' if you can partition the array into two subsets
+    such that the sum of the elements in both subsets is equal, or 'false' otherwise.
+    The function does not need to return the subsets, only whether a valid partition exists.
+    [MEDIUM] https://leetcode.com/problems/partition-equal-subset-sum/
+
+    # >>> can_partition([1, 5, 11, 5])
+    # True
+    # >>> can_partition([1, 2, 3, 5])
+    # False
+    >>> can_partition([1, 2, 5])
+    False
+    """
+    sum_nums = sum(nums)
+    if sum_nums % 2 != 0:
+        return False
+
+    half_sum = sum_nums // 2
+    is_achivable = [False] * (half_sum + 1)
+    is_achivable[0] = True
+    is_achivable_copy = is_achivable.copy()
+    for num in nums:
+        for n in range(len(is_achivable)):
+            if not is_achivable[n]:
+                continue
+            if n + num > half_sum:
+                # n always growing
+                break
+            if n + num == half_sum:
+                return True
+            is_achivable_copy[n + num] = True
+        is_achivable = is_achivable_copy.copy()
+    return False
+
+
 if __name__ == "__main__":
     import doctest
 
