@@ -155,6 +155,43 @@ def max_area_of_island(grid: List[List[int]]) -> int:
     return biggest_island
 
 
+def pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:
+    """
+    Given an m x n matrix of integers where each value represents the height above sea level,
+    the task is to find the coordinates from which water can flow to both the Pacific and Atlantic
+    Oceans. Water can flow from any cell to another cell with height less or equal to its own. The
+    Pacific Ocean touches the left and top edges of the matrix, while the Atlantic is on the right
+    and bottom edges.
+    [MEDIUM] https://leetcode.com/problems/pacific-atlantic-water-flow/
+
+    >>> pacific_atlantic([[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]])
+    [[4, 0], [0, 4], [3, 1], [1, 4], [3, 0], [2, 2], [1, 3]]
+    >>> pacific_atlantic([[1]])
+    [[0, 0]]
+    """
+    rows, cols = len(heights), len(heights[0])
+    pacific, atlantic = set(), set()
+
+    def dfs(r: int, c: int, seen: Set, prev: int):
+        if not 0 <= r < rows or not 0 <= c < cols or \
+                (r, c) in seen or heights[r][c] < prev:
+            return
+        seen.add((r, c))
+        dfs(r + 1, c, seen, heights[r][c])
+        dfs(r, c + 1, seen, heights[r][c])
+        dfs(r - 1, c, seen, heights[r][c])
+        dfs(r, c - 1, seen, heights[r][c])
+
+    for col in range(cols):
+        dfs(0, col, pacific, -1)
+        dfs(rows - 1, col, atlantic, -1)
+    for row in range(rows):
+        dfs(row, 0, pacific, -1)
+        dfs(row, cols - 1, atlantic, -1)
+
+    return [[r, c] for (r, c) in pacific.intersection(atlantic)]
+
+
 if __name__ == "__main__":
     import doctest
 
