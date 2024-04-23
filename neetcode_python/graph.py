@@ -192,6 +192,48 @@ def pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:
     return [[r, c] for (r, c) in pacific.intersection(atlantic)]
 
 
+def solve(board: List[List[str]]) -> None:
+    """
+    Modify the given m x n matrix 'board' by flipping all regions that are fully surrounded by 'X'. A region
+    is considered captured and flipped from 'O' to 'X' if all 'O's in that region are surrounded by 'X' vertically
+    and horizontally. 'O's on the border connected to other 'O's directly or indirectly are not flipped.
+    [MEDIUM] https://leetcode.com/problems/surrounded-regions/
+
+    >>> board = [['X', 'X', 'X', 'X'], ['X', 'O', 'O', 'X'],['X', 'X', 'O', 'X'],['X', 'O', 'X', 'X']]
+    >>> solve(board)
+    >>> board
+    [['X', 'X', 'X', 'X'], ['X', 'X', 'X', 'X'], ['X', 'X', 'X', 'X'], ['X', 'O', 'X', 'X']]
+    >>> board = [['X']]
+    >>> solve(board)
+    >>> board
+    [['X']]
+    """
+    rows, cols = len(board), len(board[0])
+
+    def mark_dfs(r: int, c: int):
+        if not 0 <= r < rows or not 0 <= c < cols or board[r][c] != "O":
+            return
+        board[r][c] = "OO"
+        mark_dfs(r + 1, c)
+        mark_dfs(r, c + 1)
+        mark_dfs(r - 1, c)
+        mark_dfs(r, c - 1)
+
+    for c in range(cols):
+        mark_dfs(0, c)
+        mark_dfs(rows - 1, c)
+    for r in range(rows):
+        mark_dfs(r, 0)
+        mark_dfs(r, cols - 1)
+
+    for r in range(rows):
+        for c in range(cols):
+            if board[r][c] == "O":
+                board[r][c] = "X"
+            elif board[r][c] == "OO":
+                board[r][c] = "O"
+
+
 if __name__ == "__main__":
     import doctest
 
