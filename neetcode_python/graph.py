@@ -234,6 +234,58 @@ def solve(board: List[List[str]]) -> None:
                 board[r][c] = "O"
 
 
+def oranges_rotting(grid: List[List[int]]) -> int:
+    """
+    In a given m x n grid, each cell can be empty (0), contain a fresh orange (1), or
+    contain a rotten orange (2). Each minute, any fresh orange that is 4-directionally
+    adjacent to a rotten orange will become rotten. This function returns the minimum
+    number of minutes that must elapse until no cell has a fresh orange, or -1 if this
+    is impossible.
+    [MEDIUM] https://leetcode.com/problems/rotting-oranges/
+
+    >>> oranges_rotting([[2,1,1],[1,1,0],[0,1,1]])
+    4
+    >>> oranges_rotting([[2,1,1],[0,1,1],[1,0,1]])
+    -1
+    >>> oranges_rotting([[0,2]])
+    0
+    """
+    rows, cols = len(grid), len(grid[0])
+    fresh = 0
+    que = deque([])
+
+    # add all roting oranges to first traverse level and count fresh fruits
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == 2:
+                que.append((r, c))
+            elif grid[r][c] == 1:
+                fresh += 1
+
+    # each minute mark rotting neighbors, stop when que will be empty
+    mins = -1
+    directions = ((1, 0), (-1, 0), (0, 1), (0, -1))
+    level_size = len(que)
+    while len(que) > 0:
+        (r, c) = que.popleft()
+        level_size -= 1
+
+        for dr, dc in directions:
+            row, col = r + dr, c + dc
+            if 0 <= row < rows and 0 <= col < cols and grid[row][col] == 1:
+                fresh -= 1
+                grid[row][col] = 2
+                que.append((row, col))
+
+        if level_size == 0:
+            level_size = len(que)
+            mins += 1
+    if fresh == 0:
+        return -1
+
+    return mins if mins > 0 else 0
+
+
 if __name__ == "__main__":
     import doctest
 
