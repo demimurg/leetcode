@@ -280,10 +280,101 @@ def oranges_rotting(grid: List[List[int]]) -> int:
         if level_size == 0:
             level_size = len(que)
             mins += 1
-    if fresh == 0:
+    if fresh > 0:
         return -1
 
     return mins if mins > 0 else 0
+
+
+def can_finish(num_courses: int, prerequisites: List[List[int]]) -> bool:
+    """
+    Determines if it's possible to finish all courses given the total number of courses and a list
+    of prerequisite pairs. Each pair [a, b] indicates that course a cannot be taken until course b
+    has been completed. This function returns true if it is possible to finish all courses, otherwise
+    false.
+    [MEDIUM] https://leetcode.com/problems/course-schedule/
+
+    >>> can_finish(2, [[1,0]])
+    True
+    >>> can_finish(2, [[1,0], [0,1]])
+    False
+    """
+    prereq: Dict[int, List[int]] = {}
+    for [course, must_get] in prerequisites:
+        if course not in prereq:
+            prereq[course] = []
+        prereq[course].append(must_get)
+
+    visit = set()
+
+    def find_loop(course: int) -> bool:
+        if course in visit:
+            return True
+        if not prereq.get(course, []):
+            return False
+        visit.add(course)
+
+        for pre_course in prereq[course]:
+            ok = find_loop(pre_course)
+            if ok:
+                return True
+
+        visit.remove(course)
+        prereq[course] = []
+        return False
+
+    for course in prereq.keys():
+        ok = find_loop(course)
+        if ok:
+            return False
+
+    return True
+
+
+def find_order(num_courses: int, prerequisites: List[List[int]]) -> List[int]:
+    """
+    There are a total of num_courses you have to take, labeled from 0 to num_courses - 1.
+    You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that to
+    take course ai you must first take course bi. For example, the pair [0, 1], indicates
+    that to take course 0 you must first take course 1. Return the ordering of courses you
+    should take to finish all courses. If there are many valid answers, return any of them.
+    If it is impossible to finish all courses, return an empty array.
+    [MEDIUM] https://leetcode.com/problems/course-schedule-ii/
+
+    >>> find_order(2, [[1,0]])
+    [0, 1]
+    >>> find_order(4, [[1,0],[2,0],[3,1],[3,2]])
+    [0, 1, 2, 3]
+    >>> find_order(1, [])
+    [0]
+    """
+    prereq: Dict[int, List[int]] = {}
+    for course, pre in prerequisites:
+        if course not in prereq:
+            prereq[course] = []
+        prereq[course].append(pre)
+
+    ordered, ordered_set = [], set()
+
+    def dfs(course: int, i: int = 0) -> bool:
+        if i > num_courses:
+            return False
+        if course in ordered_set:
+            return True
+
+        for pre in prereq.get(course, []):
+            if dfs(pre, i + 1) == False:
+                return False
+
+        ordered.append(course)
+        ordered_set.add(course)
+        return True
+
+    for course in range(num_courses):
+        if not dfs(course):
+            return []
+
+    return ordered
 
 
 if __name__ == "__main__":
