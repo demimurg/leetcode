@@ -377,6 +377,62 @@ def find_order(num_courses: int, prerequisites: List[List[int]]) -> List[int]:
     return ordered
 
 
+def find_redundant_connection(edges: List[List[int]]) -> List[int]:
+    """
+    In this problem, we have an undirected graph that is connected and has no cycles. We need to
+    find an edge that can be removed so that the resulting graph is still connected. This graph
+    started as a tree with nodes labeled from 1 to n, and an additional edge was added. If there
+    are multiple answers, we return the edge that occurs last in the input.
+    [MEDIUM] https://leetcode.com/problems/redundant-connection/
+
+    >>> find_redundant_connection([[1,2], [1,3], [2,3]])
+    [2, 3]
+    >>> find_redundant_connection([[1,2], [2,3], [3,4], [1,4], [1,5]])
+    [1, 4]
+    """
+    parent = [n for n in range(len(edges) + 1)]
+    childrens: Dict[int, int] = defaultdict(lambda: 1)
+
+    def get_parent(n: int) -> int:
+        while n != parent[n]:
+            n = parent[n]
+        return n
+
+    for (n1, n2) in edges:
+        p1, p2 = get_parent(n1), get_parent(n2)
+        if p1 == p2:
+            # this edge will create cycle
+            return [n1, n2]
+        if childrens[p2] > childrens[p1]:
+            # we always add smaller tree to bigger
+            p1, p2 = p2, p1
+        parent[p2] = p1
+        childrens[p1] += childrens[p2]
+
+    return []
+
+
+def find_redundant_connection_dfs(edges: List[List[int]]) -> List[int]:
+    node2node: Dict[int, List[int]] = defaultdict(list)
+
+    def is_connected(a: int, b: int, skip: int = -1) -> bool:
+        if a == b:
+            return True
+        for a_neighbor in node2node.get(a, []):
+            if a_neighbor != skip and is_connected(a_neighbor, b, skip=a):
+                return True
+        return False
+
+    for edge in edges:
+        if is_connected(edge[0], edge[1]):
+            # it will be loop if they already connected
+            return edge
+        node2node[edge[0]].append(edge[1])
+        node2node[edge[1]].append(edge[0])
+
+    return []
+
+
 if __name__ == "__main__":
     import doctest
 
