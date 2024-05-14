@@ -1,3 +1,4 @@
+import heapq
 from typing import *
 
 
@@ -70,3 +71,35 @@ class KthLargest:
         if len(self.heap) > self.k:
             return self.heap.pop_top()
         return self.heap.get_top()
+
+
+def last_stone_weight(stones: List[int]) -> int:
+    """
+    You are given an array of integers stones where stones[i] is the weight of the ith stone. We are playing a game with
+    the stones. On each turn, we choose the heaviest two stones and smash them together. Suppose the two stones have
+    weights x and y with x <= y. The smash results as follows: If x == y, both stones are destroyed; If x != y, the
+    stone of weight x is destroyed, and the stone of weight y has new weight y - x. At the end of the game, at most one
+    stone is left. Return the weight of the last remaining stone. If there are no stones left, return 0.
+    [EASY] https://leetcode.com/problems/last-stone-weight/
+
+    >>> last_stone_weight([2,7,4,1,8,1])
+    1
+    >>> last_stone_weight([1])
+    1
+    """
+    for i in range(len(stones)):
+        stones[i] *= -1
+    heapq.heapify(stones)
+    while len(stones) > 1:
+        a, b = -heapq.heappop(stones), -heapq.heappop(stones)
+        if a == b:
+            continue
+        heapq.heappush(stones, -1 * (a - b))
+
+    return -stones.pop() if len(stones) > 0 else 0
+
+
+if __name__ == "__main__":
+    import doctest
+
+    doctest.testmod()
