@@ -113,7 +113,7 @@ def k_closest(points: List[List[int]], k: int) -> List[List[int]]:
     >>> k_closest([[1,3], [-2,2]], 1)
     [[-2, 2]]
     >>> k_closest([[0,1],[1,0]], 2)
-    [[0,1], [1,0]]
+    [[0, 1], [1, 0]]
     """
     distances = [(math.sqrt(x ** 2 + y ** 2), x, y) for x, y in points]
     heapq.heapify(distances)
@@ -123,6 +123,24 @@ def k_closest(points: List[List[int]], k: int) -> List[List[int]]:
         closest_dist, x, y = heapq.heappop(distances)
         k_points[i] = ([x, y])
     return k_points
+
+
+def find_kth_largest(nums: List[int], k: int) -> int:
+    """
+    Given an integer array nums and an integer k, return the kth largest element in the array.
+    Note that it is the kth largest element in the sorted order, not the kth distinct element.
+    Can you solve it without sorting?
+    [MEDIUM] https://leetcode.com/problems/kth-largest-element-in-an-array/
+
+    >>> find_kth_largest([3,2,1,5,6,4], 2)
+    5
+    >>> find_kth_largest([3,2,3,1,2,4,5,5,6], 4)
+    4
+    """
+    heapq.heapify(nums)
+    for _ in range(len(nums) - k):
+        heapq.heappop(nums)
+    return heapq.heappop(nums)
 
 
 if __name__ == "__main__":
