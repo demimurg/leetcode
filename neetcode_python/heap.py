@@ -1,6 +1,7 @@
 import heapq
 import math
 from typing import *
+from collections import defaultdict
 
 
 class Heap:
@@ -141,6 +142,31 @@ def find_kth_largest(nums: List[int], k: int) -> int:
     for _ in range(len(nums) - k):
         heapq.heappop(nums)
     return heapq.heappop(nums)
+
+
+def least_interval(tasks: List[str], n: int) -> int:
+    """
+    You are given an array of CPU tasks, each represented by letters A to Z, and a cooling time, n.
+    Each cycle or interval allows the completion of one task. Tasks can be completed in any order, but
+    identical tasks must be separated by at least n intervals due to cooling time.
+    Return the minimum number of intervals required to complete all tasks.
+    [MEDIUM] https://leetcode.com/problems/task-scheduler/
+
+    # >>> least_interval(["A", "A", "A", "B", "B", "B"], 2)
+    # 8
+    # >>> least_interval(["A", "C", "A", "B", "D", "B"], 1)
+    # 6
+    >>> least_interval(["A", "A", "A", "B", "B", "B"], 3)
+    10
+    """
+    frequency = [0] * 26
+    for task in tasks:
+        frequency[ord(task) - ord("A")] += 1
+
+    # formula explanation: https://medium.com/@satyem77/task-scheduler-leetcode-39d579f3440
+    max_frequency = max(frequency)
+    max_frequency_count = frequency.count(max_frequency)
+    return max((max_frequency - 1) * (n + 1) + max_frequency_count, len(tasks))
 
 
 if __name__ == "__main__":
