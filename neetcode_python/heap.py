@@ -152,21 +152,75 @@ def least_interval(tasks: List[str], n: int) -> int:
     Return the minimum number of intervals required to complete all tasks.
     [MEDIUM] https://leetcode.com/problems/task-scheduler/
 
-    # >>> least_interval(["A", "A", "A", "B", "B", "B"], 2)
-    # 8
-    # >>> least_interval(["A", "C", "A", "B", "D", "B"], 1)
-    # 6
+    >>> least_interval(["A", "A", "A", "B", "B", "B"], 2)
+    8
+    >>> least_interval(["A", "C", "A", "B", "D", "B"], 1)
+    6
     >>> least_interval(["A", "A", "A", "B", "B", "B"], 3)
     10
     """
     frequency = [0] * 26
     for task in tasks:
         frequency[ord(task) - ord("A")] += 1
-
     # formula explanation: https://medium.com/@satyem77/task-scheduler-leetcode-39d579f3440
     max_frequency = max(frequency)
-    max_frequency_count = frequency.count(max_frequency)
-    return max((max_frequency - 1) * (n + 1) + max_frequency_count, len(tasks))
+    return max((max_frequency - 1) * (n + 1) + frequency.count(max_frequency), len(tasks))
+
+
+class Twitter:
+    """
+    Design a simplified version of Twitter where users can post tweets, follow/unfollow another user,
+    and is able to see the 10 most recent tweets in the user's news feed.
+    [MEDIUM] https://leetcode.com/problems/design-twitter/
+    """
+
+    def __init__(self):
+        self.followee = defaultdict(set)  # user id to set of follower ids
+        self.tweets = defaultdict(list)  # user id to list of tweet ids
+        self.counter = 0
+
+    # Composes a new tweet with ID tweetId by the user userId.
+    # Each call to this function will be made with a unique tweetId
+    def post_tweet(self, user_id: int, tweet_id: int) -> None:
+        self.tweets[user_id].append((tweet_id, self.counter))
+        self.counter -= 1
+
+    # Retrieves the 10 most recent tweet IDs in the user's news feed.
+    # Each item in the news feed must be posted by users who the user followed or by the user themself.
+    # Tweets must be ordered from most recent to least recent
+    def get_news_feed(self, user_id: int) -> List[int]:
+        # most recent tweets for each user
+        tweets_heap = []
+        self.followee[user_id].add(user_id)  # get own tweets
+        for followee_id in self.followee[user_id]:
+            if followee_id not in self.tweets:
+                continue
+            i = len(self.tweets[followee_id]) - 1
+            # add follower id and tweet index to be able to replace popped tweet and counter for heap sort
+            tweet_counter = self.tweets[followee_id][i][1]
+            tweets_heap.append((tweet_counter, followee_id, i))
+
+        heapq.heapify(tweets_heap)
+        feed = []
+        while len(tweets_heap) > 0 and len(feed) < 10:
+            _, followee_id, i = heapq.heappop(tweets_heap)
+            tweet_id = self.tweets[followee_id][i][0]
+            feed.append(tweet_id)
+            if i != 0:
+                # add previous user tweet instead popped
+                tweet_counter = self.tweets[followee_id][i - 1][1]
+                heapq.heappush(tweets_heap, (tweet_counter, followee_id, i - 1))
+
+        return feed
+
+    # The user with ID followerId started following the user with ID followeeId
+    def follow(self, follower_id: int, followee_id: int) -> None:
+        self.followee[follower_id].add(followee_id)
+
+    # The user with ID followerId started unfollowing the user with ID followeeId
+    def unfollow(self, follower_id: int, followee_id: int) -> None:
+        if followee_id in self.followee[follower_id]:
+            self.followee[follower_id].remove(followee_id)
 
 
 if __name__ == "__main__":
