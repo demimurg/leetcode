@@ -76,6 +76,35 @@ def jump(nums: List[int]) -> int:
     return min_steps
 
 
+def can_complete_circuit(gas: List[int], cost: List[int]) -> int:
+    """
+    There are n gas stations along a circular route, where the amount of gas at the ith station is gas[i].
+
+    You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from the ith station to its next
+    (i + 1)th station. You begin the journey with an empty tank at one of the gas stations.
+
+    Given two integer arrays gas and cost, return the starting gas station's index if you can travel around the circuit
+    once in the clockwise direction, otherwise return -1. If there exists a solution, it is guaranteed to be unique.
+
+    [MEDIUM] https://leetcode.com/problems/gas-station/
+
+    >>> can_complete_circuit([1,2,3,4,5], [3,4,5,1,2])
+    3
+    >>> can_complete_circuit([2,3,4], [3,4,3])
+    -1
+    """
+    cur, total, start_i = 0, 0, 0
+    for i in range(len(gas)):
+        diff = gas[i] - cost[i]
+        cur += diff
+        total += diff
+        if cur < 0:
+            cur = 0
+            start_i = i + 1
+
+    return start_i if total >= 0 else -1
+
+
 if __name__ == "__main__":
     import doctest
 
