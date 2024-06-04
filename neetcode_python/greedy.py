@@ -1,3 +1,4 @@
+import heapq
 from typing import *
 
 
@@ -103,6 +104,58 @@ def can_complete_circuit(gas: List[int], cost: List[int]) -> int:
             start_i = i + 1
 
     return start_i if total >= 0 else -1
+
+
+def is_n_straight_hand(hand: List[int], group_size: int) -> bool:
+    """
+    Alice has some number of cards and she wants to rearrange the cards into groups so that each group is of size
+    group_size, and consists of group_size consecutive cards.
+    Given an integer array hand where hand[i] is the value written on the i-th card and an integer group_size,
+    return true if she can rearrange the cards, or false otherwise.
+    [MEDIUM] https://leetcode.com/problems/hand-of-straights/
+
+    >>> is_n_straight_hand([1,2,3,6,2,3,4,7,8], 3)
+    True
+    >>> is_n_straight_hand([1,2,3,4,5], 4)
+    False
+    >>> is_n_straight_hand([1,1,2,2,3,3], 3)
+    True
+    """
+    if len(hand) % group_size != 0:
+        return False
+    heapq.heapify(hand)
+
+    groups = []
+    while len(hand) > 0:
+        card = heapq.heappop(hand)
+
+        min_group = 100000
+        # add card to one of existant groups or create new
+        for i in range(len(groups)):
+            if card != groups[i][0] + 1:
+                min_group = min(min_group, groups[i][0])
+                continue
+
+            # increment max value of group, and decrement awaited number of members
+            groups[i][0] += 1
+            groups[i][1] -= 1
+
+            # remove filled group in memory efficient way
+            if groups[i][1] == 0:
+                if i < len(groups) - 1:
+                    groups[i] = groups[-1]
+                groups.pop()
+            break
+        else:
+            if card > min_group:
+                return False
+            if group_size <= 1:
+                break
+            # add new group started from current value if consequtive card not found
+            groups.append([card, group_size - 1])
+
+    # all groups must be filled and deleted
+    return len(groups) == 0
 
 
 if __name__ == "__main__":
