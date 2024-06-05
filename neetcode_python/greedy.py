@@ -158,6 +158,40 @@ def is_n_straight_hand(hand: List[int], group_size: int) -> bool:
     return len(groups) == 0
 
 
+def merge_triplets(triplets: List[List[int]], target: List[int]) -> bool:
+    """
+    A triplet is an array of three integers. You are given a 2D integer array triplets,
+    where triplets[i] = [a_i, b_i, c_i] describes the ith triplet. You are also given an integer array
+    target = [x, y, z] that describes the triplet you want to obtain. To obtain target, you may apply the
+    following operation on triplets any number of times (possibly zero): Choose two indices (0-indexed)
+    i and j (i != j) and update triplets[j] to become [max(a_i, a_j), max(b_i, b_j), max(c_i, c_j)].
+    Return true if it is possible to obtain the target triplet [x, y, z] as an element of triplets, or false otherwise.
+    [MEDIUM] https://leetcode.com/problems/merge-triplets-to-form-target-triplet/
+
+    >>> merge_triplets([[2,5,3],[1,8,4],[1,7,5]], [2,7,5])
+    True
+    >>> merge_triplets([[3,4,5],[4,5,6]], [3,2,5])
+    False
+    >>> merge_triplets([[2,5,3],[2,3,4],[1,2,5],[5,2,3]], [5,5,5])
+    True
+    """
+    max_triplet = [0] * len(target)
+
+    for triplet in triplets:
+        for i in range(len(target)):
+            # if this triplet is more than target it will ruin max_triplet, so we skip it
+            if triplet[i] > target[i]:
+                break
+        else:
+            # we can use max for triplet values without harm
+            for i in range(len(triplet)):
+                max_triplet[i] = max(max_triplet[i], triplet[i])
+
+    # max triplet is the result of max func for all valid triplet
+    # it is either equal to target or it's not possible to find one
+    return max_triplet == target
+
+
 if __name__ == "__main__":
     import doctest
 
