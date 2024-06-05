@@ -192,6 +192,51 @@ def merge_triplets(triplets: List[List[int]], target: List[int]) -> bool:
     return max_triplet == target
 
 
+def partition_labels(s: str) -> List[int]:
+    """
+    You are given a string s. We want to partition the string into as many parts as possible so that each letter
+    appears in at most one part. Note that the partition is done so that after concatenating all the parts in order,
+    the resultant string should be s. Return a list of integers representing the size of these parts.
+
+    [MEDIUM] https://leetcode.com/problems/partition-labels/
+
+    >>> partition_labels('ababcbacadefegdehijhklij')
+    [9, 7, 8]
+    >>> partition_labels('eccbbbbdec')
+    [10]
+    """
+    chars = {}
+    for i, char in enumerate(s):
+        if char not in chars:
+            chars[char] = [i, i]
+        else:
+            chars[char][1] = i
+
+    chars_intervals = list(chars.values())
+    return [r - l + 1 for l, r in merge_intervals(chars_intervals)]
+
+
+def merge_intervals(intervals):
+    if not intervals:
+        return []
+    # sort the intervals based on the start time
+    intervals.sort(key=lambda x: x[0])
+
+    merged_intervals = [intervals[0]]
+    for current in intervals[1:]:
+        last_merged = merged_intervals[-1]
+
+        # check if the current interval overlaps with the last merged interval
+        if current[0] < last_merged[1]:
+            # merge the intervals by updating the end of the last merged interval
+            merged_intervals[-1][1] = max(last_merged[1], current[1])
+        else:
+            # if they don't overlap, add the current interval to the merged list
+            merged_intervals.append(current)
+
+    return merged_intervals
+
+
 if __name__ == "__main__":
     import doctest
 
