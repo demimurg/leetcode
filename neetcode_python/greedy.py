@@ -205,6 +205,19 @@ def partition_labels(s: str) -> List[int]:
     >>> partition_labels('eccbbbbdec')
     [10]
     """
+    end = {char: i for i, char in enumerate(s)}
+    partitions, last_i = [], -1
+    for i, char in enumerate(s):
+        if i > last_i:
+            partitions.append(end[char] - last_i)
+            last_i = end[char]
+        else:
+            partitions[-1] = max(partitions[-1], partitions[-1] + end[char] - last_i)
+            last_i = max(last_i, end[char])
+    return partitions
+
+
+def partition_labels_2(s: str) -> List[int]:
     chars = {}
     for i, char in enumerate(s):
         if char not in chars:
