@@ -250,6 +250,42 @@ def merge_intervals(intervals):
     return merged_intervals
 
 
+def check_valid_string(s: str) -> bool:
+    """
+    Given a string s containing only three types of characters: '(', ')' and '*', return true if s is valid.
+    The following rules define a valid string:
+    - Any left parenthesis '(' must have a corresponding right parenthesis ')'.
+    - Any right parenthesis ')' must have a corresponding left parenthesis '('.
+    - Left parenthesis '(' must go before the corresponding right parenthesis ')'.
+    - '*' could be treated as a single right parenthesis ')' or a single left parenthesis '(' or an empty string ''.
+    [MEDIUM] https://leetcode.com/problems/valid-parenthesis-string/
+
+    >>> check_valid_string('()')
+    True
+    >>> check_valid_string('(*)')
+    True
+    >>> check_valid_string('(*))')
+    True
+    """
+    min_left, max_left = 0, 0
+    for char in s:
+        if char == "(":
+            min_left += 1
+            max_left += 1
+        elif char == ")":
+            min_left -= 1
+            max_left -= 1
+        else:  # "*"
+            min_left -= 1
+            max_left += 1
+
+        if max_left < 0:
+            return False
+        min_left = max(min_left, 0)
+
+    return min_left == 0
+
+
 if __name__ == "__main__":
     import doctest
 
