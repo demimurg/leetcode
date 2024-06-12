@@ -80,6 +80,85 @@ def network_delay_time(times: List[List[int]], n: int, k: int) -> int:
     return network_delay if len(to_visit) == 0 else -1
 
 
+def find_cheapest_price(n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+    """
+    There are n cities connected by some number of flights. You are given an array flights where
+    flights[i] = [from_i, to_i, price_i] indicates that there is a flight from city from_i to city to_i with cost
+    price_i. You are also given three integers src, dst, and k, return the cheapest price from src to dst with at most
+    k stops. If there is no such route, return -1.
+    [MEDIUM] https://leetcode.com/problems/cheapest-flights-within-k-stops/
+
+    >>> find_cheapest_price(4, [[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]], 0, 3, 1)
+    700
+    >>> find_cheapest_price(3, [[0,1,100],[1,2,100],[0,2,500]], 0, 2, 1)
+    200
+    >>> find_cheapest_price(3, [[0,1,100],[1,2,100],[0,2,500]], 0, 2, 0)
+    500
+    """
+    prices = {src: 0}
+    for _ in range(k + 1):
+        prices_new = prices.copy()
+        for a, b, price in flights:
+            if a not in prices:
+                continue
+            if prices[a] + price < prices_new.get(b, 10 ** 6):
+                prices_new[b] = prices[a] + price
+        prices = prices_new
+    return prices[dst] if dst in prices else -1
+
+
+def find_cheapest_price_bfs(n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+    flights_dict = {}
+    for from_i, to_i, price in flights:
+        if from_i not in flights_dict:
+            flights_dict[from_i] = []
+        flights_dict[from_i].append((to_i, price))
+
+    stops = -1
+    que = deque([(src, 0)])
+    seen = set()
+    dst_price = 1000000
+    while stops <= k:
+        for _ in range(len(que)):
+            point, price = que.popleft()
+            if point in seen:
+                continue
+            if point == dst:
+                dst_price = min(dst_price, price)
+                continue
+
+            for point_to, price_to in flights_dict.get(point, []):
+                if point_to not in seen:
+                    que.append((point_to, price + price_to))
+
+        stops += 1
+
+    return dst_price if dst_price != 1000000 else -1
+
+
+def find_cheapest_price_dijkstra(n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+    flights_dict = {}
+    for from_i, to_i, price in flights:
+        if from_i not in flights_dict:
+            flights_dict[from_i] = []
+        flights_dict[from_i].append((to_i, price))
+
+    seen = set()
+    prices = [(0, src, -1)]  # (total_price, point, stops)
+    while len(prices) > 0:
+        price, point, stops = heapq.heappop(prices)
+        if point == dst:
+            return price
+        if point in seen or stops == k:
+            continue
+
+        for next_point, next_price in flights_dict.get(point, []):
+            if next_point not in seen:
+                heapq.heappush(prices, (price + next_price, next_point, stops + 1))
+
+    return -1
+
+
 if __name__ == "__main__":
     import doctest
 
