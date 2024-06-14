@@ -29,6 +29,37 @@ def unique_paths(m: int, n: int) -> int:
     # return math.comb(m + n - 2, m - 1) we can use mathematical approach too
 
 
+def longest_common_subsequence(text1: str, text2: str) -> int:
+    """
+    Given two strings text1 and text2, return the length of their longest common subsequence. If there is no common
+    subsequence, return 0.
+    A subsequence of a string is a new string generated from the original string with some characters (can be none)
+    deleted without changing the relative order of the remaining characters.
+    A common subsequence of two strings is a subsequence that is common to both strings.
+    [MEDIUM] https://leetcode.com/problems/longest-common-subsequence/
+
+    >>> longest_common_subsequence('abcde', 'ace')
+    3
+    >>> longest_common_subsequence('abc', 'abc')
+    3
+    >>> longest_common_subsequence('abc', 'def')
+    0
+    """
+    if len(text1) < len(text2):
+        text2, text1 = text1, text2
+
+    row_size = len(text2) + 1  # last column will be always zero
+    first, second = [0] * row_size, [0] * row_size
+    for i in range(len(text1) - 1, -1, -1):
+        for j in range(len(text2) - 1, -1, -1):
+            if text1[i] == text2[j]:
+                first[j] = 1 + second[j + 1]  # diagonal shift
+            else:
+                first[j] = max(second[j], first[j + 1])  # max from bottom and right
+        first, second = second, first
+    return second[0]
+
+
 if __name__ == "__main__":
     import doctest
 
