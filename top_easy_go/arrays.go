@@ -6,14 +6,14 @@ package top_easy
 // Return k after placing the final result in the first k slots of nums
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/727/
 func removeDuplicates(nums []int) int {
-	k := 1 // k slots guaranteed to be non-duplicate
-	for i := range nums {
-		if nums[i] != nums[k-1] {
-			nums[k] = nums[i]
-			k++
-		}
-	}
-	return k
+    k := 1 // k slots guaranteed to be non-duplicate
+    for i := range nums {
+        if nums[i] != nums[k-1] {
+            nums[k] = nums[i]
+            k++
+        }
+    }
+    return k
 }
 
 // You are given an integer array prices where prices[i] is the price of a given stock on the ith day.
@@ -21,12 +21,12 @@ func removeDuplicates(nums []int) int {
 // Find and return the maximum profit you can achieve. 0 <= prices[i] <= 10^4
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/564/
 func maxProfit(prices []int) (profit int) {
-	for i := 1; i < len(prices); i++ {
-		if prices[i] > prices[i-1] {
-			profit += prices[i] - prices[i-1]
-		}
-	}
-	return profit
+    for i := 1; i < len(prices); i++ {
+        if prices[i] > prices[i-1] {
+            profit += prices[i] - prices[i-1]
+        }
+    }
+    return profit
 }
 
 // Given an array, rotate the array to the right by k steps, where k is non-negative.
@@ -34,60 +34,60 @@ func maxProfit(prices []int) (profit int) {
 // * Could you do it in-place with O(1) extra space?
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/646/
 func rotate(nums []int, k int) {
-	k = k % len(nums) // throw period away
-	shift := append(nums[len(nums)-k:], nums[:len(nums)-k]...)
-	copy(nums, shift)
+    k = k % len(nums) // throw period away
+    shift := append(nums[len(nums)-k:], nums[:len(nums)-k]...)
+    copy(nums, shift)
 }
 
 func rotate2(nums []int, k int) {
-	// rotate realization with ram optimized
-	k = k % len(nums)
-	for i := 0; i < k; i++ {
-		buffer := nums[0]
-		for j := 0; j < len(nums); j++ {
-			next := (j + 1) % len(nums)
-			buffer, nums[next] = nums[next], buffer
-		}
-	}
+    // rotate realization with ram optimized
+    k = k % len(nums)
+    for i := 0; i < k; i++ {
+        buffer := nums[0]
+        for j := 0; j < len(nums); j++ {
+            next := (j + 1) % len(nums)
+            buffer, nums[next] = nums[next], buffer
+        }
+    }
 }
 
 func rotate3(nums []int, k int) {
-	// hacky rotate realization, short and efficient
-	reverse := func(nums []int) {
-		for i := 0; i < len(nums)/2; i++ {
-			j := len(nums) - i - 1
-			nums[i], nums[j] = nums[j], nums[i]
-		}
-	}
+    // hacky rotate realization, short and efficient
+    reverse := func(nums []int) {
+        for i := 0; i < len(nums)/2; i++ {
+            j := len(nums) - i - 1
+            nums[i], nums[j] = nums[j], nums[i]
+        }
+    }
 
-	k = k % len(nums)
-	reverse(nums)
-	reverse(nums[:k])
-	reverse(nums[k:])
+    k = k % len(nums)
+    reverse(nums)
+    reverse(nums[:k])
+    reverse(nums[k:])
 }
 
 // Given an integer array nums, return true if any value appears
 // at least twice in the array, and return false if every element is distinct.
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/578/
 func containsDuplicate(nums []int) bool {
-	seen := make(map[int]struct{}) // use struct{} to save memory
-	for _, num := range nums {
-		if _, ok := seen[num]; ok {
-			return true
-		}
-		seen[num] = struct{}{}
-	}
-	return false
+    seen := make(map[int]struct{}) // use struct{} to save memory
+    for _, num := range nums {
+        if _, ok := seen[num]; ok {
+            return true
+        }
+        seen[num] = struct{}{}
+    }
+    return false
 }
 
 // Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.
 // * You must implement a solution with a linear runtime complexity and use only constant extra space.
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/549/
 func singleNumber(nums []int) (res int) {
-	for i := range nums {
-		res ^= nums[i] // xor, all bit pairs will give 0
-	}
-	return res
+    for i := range nums {
+        res ^= nums[i] // xor, all bit pairs will give 0
+    }
+    return res
 }
 
 // Given two integer arrays nums1 and nums2, return an array of their intersection.
@@ -95,20 +95,20 @@ func singleNumber(nums []int) (res int) {
 // both arrays, and you may return the result in any order.
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/674/
 func intersect(nums1, nums2 []int) []int {
-	count := make(map[int]int)
-	for _, n := range nums1 {
-		count[n]++
-	}
+    count := make(map[int]int)
+    for _, n := range nums1 {
+        count[n]++
+    }
 
-	result := make([]int, 0, len(count))
-	for _, n := range nums2 {
-		if count[n] > 0 {
-			result = append(result, n)
-			count[n]--
-		}
-	}
+    result := make([]int, 0, len(count))
+    for _, n := range nums2 {
+        if count[n] > 0 {
+            result = append(result, n)
+            count[n]--
+        }
+    }
 
-	return result
+    return result
 }
 
 // You are given a large integer represented as an integer array digits,
@@ -121,19 +121,19 @@ func intersect(nums1, nums2 []int) []int {
 // * digits does not contain any leading 0's.
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/559/
 func plusOne(digits []int) []int {
-	for i := len(digits) - 1; i >= 0; i-- {
-		if digits[i] < 9 {
-			digits[i]++
-			break
-		}
-		digits[i] = 0
-	}
+    for i := len(digits) - 1; i >= 0; i-- {
+        if digits[i] < 9 {
+            digits[i]++
+            break
+        }
+        digits[i] = 0
+    }
 
-	// slice does not contain any leading 0's, so it can be only overflow (099..9)
-	if digits[0] == 0 {
-		return append([]int{1}, digits...)
-	}
-	return digits
+    // slice does not contain any leading 0's, so it can be only overflow (099..9)
+    if digits[0] == 0 {
+        return append([]int{1}, digits...)
+    }
+    return digits
 }
 
 // Given an integer array nums, move all 0's to the end of it while
@@ -141,16 +141,16 @@ func plusOne(digits []int) []int {
 // * note that you must do this in-place without making a copy of the array.
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/567/
 func moveZeroes(nums []int) {
-	j := 0
-	for i := 0; i < len(nums); i++ {
-		if nums[i] != 0 {
-			nums[j] = nums[i]
-			j++
-		}
-	}
-	for i := j; i < len(nums); i++ {
-		nums[i] = 0
-	}
+    j := 0
+    for i := 0; i < len(nums); i++ {
+        if nums[i] != 0 {
+            nums[j] = nums[i]
+            j++
+        }
+    }
+    for i := j; i < len(nums); i++ {
+        nums[i] = 0
+    }
 }
 
 // Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
@@ -158,14 +158,14 @@ func moveZeroes(nums []int) {
 // You can return the answer in any order.
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/546/
 func twoSum(nums []int, target int) []int {
-	idx := make(map[int]int)
-	for i1, n := range nums {
-		if i2, ok := idx[target-n]; ok {
-			return []int{i1, i2}
-		}
-		idx[n] = i1
-	}
-	return nil
+    idx := make(map[int]int)
+    for i1, n := range nums {
+        if i2, ok := idx[target-n]; ok {
+            return []int{i1, i2}
+        }
+        idx[n] = i1
+    }
+    return nil
 }
 
 // Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
@@ -174,22 +174,22 @@ func twoSum(nums []int, target int) []int {
 // Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/769/
 func isValidSudoku(board [][]byte) bool {
-	var rows, columns, squares [9][9]bool
-	for i := range board {
-		for j, val := range board[i] {
-			if val == '.' {
-				continue
-			}
+    var rows, columns, squares [9][9]bool
+    for i := range board {
+        for j, val := range board[i] {
+            if val == '.' {
+                continue
+            }
 
-			val -= '1' // use array indexes to mark already seen values
-			squareIdx := i/3*3 + j/3
-			if rows[i][val] || columns[j][val] || squares[squareIdx][val] {
-				return false
-			}
-			rows[i][val], columns[j][val], squares[squareIdx][val] = true, true, true
-		}
-	}
-	return true
+            val -= '1' // use array indexes to mark already seen values
+            squareIdx := i/3*3 + j/3
+            if rows[i][val] || columns[j][val] || squares[squareIdx][val] {
+                return false
+            }
+            rows[i][val], columns[j][val], squares[squareIdx][val] = true, true, true
+        }
+    }
+    return true
 }
 
 // You are given an n x n 2D matrix representing an image, rotate the image by 90 degrees (clockwise).
@@ -201,19 +201,19 @@ func isValidSudoku(board [][]byte) bool {
 // * -1000 <= matrix[i][j] <= 1000
 // https://leetcode.com/explore/interview/card/top-interview-questions-easy/92/array/770/
 func rotateImage(matrix [][]int) {
-	size := len(matrix)
-	// transpose matrix first
-	for i := 0; i < size-1; i++ {
-		for j := 0; j < size-i-1; j++ {
-			invI, invJ := size-i-1, size-j-1
-			matrix[i][j], matrix[invJ][invI] = matrix[invJ][invI], matrix[i][j]
-		}
-	}
-	// invert rows (i with size-i-i)
-	for i := 0; i < size/2; i++ {
-		for j := 0; j < size; j++ {
-			invI := size - i - 1
-			matrix[i][j], matrix[invI][j] = matrix[invI][j], matrix[i][j]
-		}
-	}
+    size := len(matrix)
+    // transpose matrix first
+    for i := 0; i < size-1; i++ {
+        for j := 0; j < size-i-1; j++ {
+            invI, invJ := size-i-1, size-j-1
+            matrix[i][j], matrix[invJ][invI] = matrix[invJ][invI], matrix[i][j]
+        }
+    }
+    // invert rows (i with size-i-i)
+    for i := 0; i < size/2; i++ {
+        for j := 0; j < size; j++ {
+            invI := size - i - 1
+            matrix[i][j], matrix[invI][j] = matrix[invI][j], matrix[i][j]
+        }
+    }
 }

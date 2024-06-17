@@ -60,6 +60,37 @@ def longest_common_subsequence(text1: str, text2: str) -> int:
     return second[0]
 
 
+def max_profit(prices: List[int]) -> int:
+    """
+    You are given an array prices where prices[i] is the price of a given stock on the ith day.
+    Find the maximum profit you can achieve. You may complete as many transactions as you like
+    (i.e., buy one and sell one share of the stock multiple times) with the following restrictions:
+    - After you sell your stock, you cannot buy stock on the next day (i.e., cooldown one day).
+    Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock
+    before you buy again).
+
+    [MEDIUM] https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
+
+    >>> max_profit([1, 2, 3, 0, 2])
+    3
+    >>> max_profit([1])
+    0
+    >>> max_profit([1,2,4])
+    3
+    """
+    buy, hold, sell, wait = 0, float('-inf'), float('-inf'), 0
+
+    for price in prices:
+        buy, hold, sell, wait = (
+            wait - price,
+            max(buy, hold),
+            max(buy, hold) + price,
+            max(sell, wait)
+        )
+
+    return max(sell, wait)
+
+
 if __name__ == "__main__":
     import doctest
 
