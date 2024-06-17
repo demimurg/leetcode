@@ -78,17 +78,37 @@ def max_profit(prices: List[int]) -> int:
     >>> max_profit([1,2,4])
     3
     """
-    buy, hold, sell, wait = 0, float('-inf'), float('-inf'), 0
+    memo = {}
+
+    def dfs(i: int, buying: bool) -> int:
+        if i >= len(prices):
+            return 0
+        if (i, buying) in memo:
+            return memo[(i, buying)]
+
+        cooldown = dfs(i + 1, buying)
+        if buying:
+            buy = dfs(i + 1, buying=False) - prices[i]
+            memo[(i, buying)] = max(buy, cooldown)
+        else:
+            sell = dfs(i + 2, buying=True) + prices[i]
+            memo[(i, buying)] = max(sell, cooldown)
+        return memo[(i, buying)]
+
+    return dfs(0, buying=True)
+
+
+def max_profit_2(prices: List[int]) -> int:
+    sell, buy, cooldown = -1001, -1001, 0
 
     for price in prices:
-        buy, hold, sell, wait = (
-            wait - price,
-            max(buy, hold),
-            max(buy, hold) + price,
-            max(sell, wait)
+        sell, buy, cooldown = (
+            buy + price,  # profit after selling stock held
+            max(buy, cooldown - price),  # max of holding or buying stock
+            max(sell, cooldown)  # max of being in cooldown or not holding stock
         )
 
-    return max(sell, wait)
+    return max(sell, cooldown)
 
 
 if __name__ == "__main__":
