@@ -111,6 +111,56 @@ def max_profit_2(prices: List[int]) -> int:
     return max(sell, cooldown)
 
 
+def change(amount: int, coins: List[int]) -> int:
+    """
+    You are given an integer array coins representing coins of different denominations and an integer amount
+    representing a total amount of money.
+
+    Return the number of combinations that make up that amount. If that amount of money cannot be made up by any
+    combination of the coins, return 0.
+
+    You may assume that you have an infinite number of each kind of coin.
+
+    The answer is guaranteed to fit into a signed 32-bit integer.
+
+    [MEDIUM] https://leetcode.com/problems/coin-change-ii/
+
+    >>> change(5, [1, 2, 5])
+    4
+    >>> change(3, [2])
+    0
+    >>> change(10, [10])
+    1
+    """
+    dp = [1] + [0] * amount
+    for coin in coins:
+        for i in range(coin, amount + 1):
+            dp[i] += dp[i - coin]
+
+    return dp[amount]
+
+
+def change_bruteforce(total_amount: int, coins: List[int]) -> int:
+    memo = {}
+
+    def dfs(amount: int, i: int) -> int:
+        if amount == 0:
+            return 1
+        if (amount, i) in memo:
+            return memo[(amount, i)]
+
+        combinations = 0
+        for j in range(i, len(coins)):
+            next_amount = amount - coins[j]
+            if next_amount < 0:
+                continue
+            combinations += dfs(next_amount, j)
+        memo[(amount, i)] = combinations
+        return combinations
+
+    return dfs(total_amount, 0)
+
+
 if __name__ == "__main__":
     import doctest
 
