@@ -1,4 +1,5 @@
 from typing import *
+from collections import *
 
 
 def unique_paths(m: int, n: int) -> int:
@@ -159,6 +160,48 @@ def change_bruteforce(total_amount: int, coins: List[int]) -> int:
         return combinations
 
     return dfs(total_amount, 0)
+
+
+def find_target_sum_ways(nums: List[int], target: int) -> int:
+    """
+    You are given an integer array nums and an integer target.
+
+    You want to build an expression out of nums by adding one of the symbols '+' and '-' before each integer in nums
+    and then concatenate all the integers.
+
+    Return the number of different expressions that you can build, which evaluates to target.
+    [MEDIUM] https://leetcode.com/problems/target-sum/
+
+    >>> find_target_sum_ways([1, 1, 1, 1, 1], 3)
+    5
+    >>> find_target_sum_ways([1], 1)
+    1
+    """
+    dp = {0: 1}  # target and possible ways to reach it
+    for i in range(len(nums)):
+        new_dp = defaultdict(int)
+        for s, count in dp.items():
+            # count new targets that we can reach with current num.
+            # new target can be reached in few ways s1 - num == s2 + num,
+            # so we should add to new counter (not set)
+            new_dp[s + nums[i]] += count
+            new_dp[s - nums[i]] += count
+        dp = new_dp
+
+    return dp[target]
+
+
+def find_target_sum_ways_bruteforce(nums: List[int], target: int) -> int:
+    memo = {}
+
+    def dfs(i, result):
+        if i == len(nums):
+            return 1 if result == target else 0
+        if (i, result) not in memo:
+            memo[(i, result)] = dfs(i + 1, result - nums[i]) + dfs(i + 1, result + nums[i])
+        return memo[(i, result)]
+
+    return dfs(0, 0)
 
 
 if __name__ == "__main__":
