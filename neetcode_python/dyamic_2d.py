@@ -254,19 +254,18 @@ def min_distance(word1: str, word2: str) -> int:
     >>> min_distance('intention', 'execution')
     5
     """
-    prev, cur = [j for j in reversed(range(len(word2) + 1))], [0] * (len(word2) + 1)
+    prev, cur = [j for j in range(len(word2) + 1)], [0] * (len(word2) + 1)
 
-    for i in reversed(range(len(word1))):
-        cur[-1] = prev[-1] + 1
-        for j in reversed(range(len(word2))):
-            # insert, delete or replace
-            cur[j] = 1 + min(cur[j + 1], prev[j], prev[j + 1])
-            if word1[i] == word2[j]:
-                # avoid changing word1 if possible
-                cur[j] = min(cur[j], prev[j + 1])
+    for i in range(1, len(word1) + 1):
+        cur[0] = prev[0] + 1
+        for j in range(1, len(word2) + 1):
+            insert = 1 + cur[j - 1]
+            delete = 1 + prev[j]
+            replace_or_move = prev[j - 1] + (1 if word1[i - 1] != word2[j - 1] else 0)
+            cur[j] = min(insert, delete, replace_or_move)
         cur, prev = prev, cur
 
-    return prev[0]
+    return prev[-1]
 
 
 if __name__ == "__main__":
