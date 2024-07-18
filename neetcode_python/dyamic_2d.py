@@ -240,6 +240,35 @@ def is_interleave(s1: str, s2: str, s3: str) -> bool:
     return dp[-1]
 
 
+def min_distance(word1: str, word2: str) -> int:
+    """
+    Given two strings word1 and word2, return the minimum number of operations required to convert word1 to word2.
+    You have the following three operations permitted on a word:
+    1. Insert a character
+    2. Delete a character
+    3. Replace a character
+    [MEDIUM] https://leetcode.com/problems/edit-distance/
+
+    >>> min_distance('horse', 'ros')
+    3
+    >>> min_distance('intention', 'execution')
+    5
+    """
+    prev, cur = [j for j in reversed(range(len(word2) + 1))], [0] * (len(word2) + 1)
+
+    for i in reversed(range(len(word1))):
+        cur[-1] = prev[-1] + 1
+        for j in reversed(range(len(word2))):
+            # insert, delete or replace
+            cur[j] = 1 + min(cur[j + 1], prev[j], prev[j + 1])
+            if word1[i] == word2[j]:
+                # avoid changing word1 if possible
+                cur[j] = min(cur[j], prev[j + 1])
+        cur, prev = prev, cur
+
+    return prev[0]
+
+
 if __name__ == "__main__":
     import doctest
 
