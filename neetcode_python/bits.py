@@ -64,6 +64,24 @@ def count_bits(n: int) -> List[int]:
     return nums
 
 
+def reverse_bits(n: int) -> int:
+    """
+    Reverse bits of a given 32 bits unsigned integer.
+    [EASY] https://leetcode.com/problems/reverse-bits/
+
+    >>> reverse_bits(0b00000010100101000001111010011100)
+    964176192
+    >>> reverse_bits(0b11111111111111111111111111111101)
+    3221225471
+    """
+    result = 0
+    for i in range(32):
+        result <<= 1  # Shift result left to make room for the next bit
+        result |= (n & 1)  # Add the least significant bit of n to result
+        n >>= 1  # Shift n right to process the next bit
+    return result
+
+
 if __name__ == "__main__":
     import doctest
 
