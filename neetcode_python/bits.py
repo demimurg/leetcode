@@ -82,7 +82,29 @@ def reverse_bits(n: int) -> int:
     return result
 
 
+def missing_number(nums: List[int]) -> int:
+    """
+    Given an array nums containing n distinct numbers in the range [0, n], return the only number in the range
+    that is missing from the array.
+    [EASY] https://leetcode.com/problems/missing-number/
+
+    >>> missing_number([3,0,1])
+    2
+    >>> missing_number([0,1])
+    2
+    >>> missing_number([9,6,4,2,3,5,7,0,1])
+    8
+    """
+    missing = 0
+    for num in nums:
+        missing ^= num
+    for num in range(1, len(nums) + 1):
+        missing ^= num
+    return missing
+    # return int(((1 + len(nums)) / 2) * len(nums)) - sum(nums)
+
+
 if __name__ == "__main__":
     import doctest
 
-    doctest.testmod()
+doctest.testmod()
