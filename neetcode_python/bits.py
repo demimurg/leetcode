@@ -104,6 +104,46 @@ def missing_number(nums: List[int]) -> int:
     # return int(((1 + len(nums)) / 2) * len(nums)) - sum(nums)
 
 
+def get_sum(a: int, b: int) -> int:
+    """
+    Given two integers a and b, return the sum of the two integers without using the operators + and -.
+    [MEDIUM] https://leetcode.com/problems/sum-of-two-integers/
+
+    >>> get_sum(1, 2)
+    3
+    >>> get_sum(2, 3)
+    5
+    """
+    while b != 0:
+        a, b = a ^ b, (a & b) << 1
+    return a
+
+
+def reverse_integer(x: int) -> int:
+    """
+    Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside
+    the signed 32-bit integer range [-2**31, 2**31 - 1], then return 0.
+    Assume the environment does not allow you to store 64-bit integers (signed or unsigned).
+    [MEDIUM] https://leetcode.com/problems/reverse-integer/
+
+    >>> reverse_integer(123)
+    321
+    >>> reverse_integer(-123)
+    -321
+    >>> reverse_integer(120)
+    21
+    """
+    sign = -1 if x < 0 else 1
+    x *= sign
+
+    num = 0
+    while x != 0:
+        num = num * 10 + x % 10
+        x //= 10
+
+    return num * sign if num < 2 ** 31 - 1 else 0
+
+
 if __name__ == "__main__":
     import doctest
 
