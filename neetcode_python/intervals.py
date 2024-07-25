@@ -65,6 +65,30 @@ def insert_interval_2(intervals: List[List[int]], new_interval: List[int]) -> Li
     return res
 
 
+def merge_intervals(intervals: List[List[int]]) -> List[List[int]]:
+    """
+    Given an array of intervals where intervals[i] = [start_i, end_i], merge all overlapping intervals, and return
+    an array of the non-overlapping intervals that cover all the intervals in the input.
+    [MEDIUM] https://leetcode.com/problems/merge-intervals/
+
+    >>> merge_intervals([[1,3],[2,6],[8,10],[15,18]])
+    [[1, 6], [8, 10], [15, 18]]
+    >>> merge_intervals([[1,4],[4,5]])
+    [[1, 5]]
+    """
+    intervals.sort()
+    i, start, end = 0, 0, 1
+    for j in range(1, len(intervals)):
+        if intervals[j][start] <= intervals[i][end]:
+            # j interval includes in i or extends it
+            intervals[i][end] = max(intervals[i][end], intervals[j][end])
+            continue
+        i += 1
+        intervals[i] = intervals[j]
+
+    return intervals[:i + 1]
+
+
 if __name__ == "__main__":
     import doctest
 
