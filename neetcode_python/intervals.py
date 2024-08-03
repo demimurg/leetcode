@@ -114,6 +114,47 @@ def erase_overlap_intervals(intervals: List[List[int]]) -> int:
     return count
 
 
+def can_attend_meetings(intervals: List[List[int]]) -> bool:
+    """
+    Given an array of meeting time interval objects consisting of start and end times [[start_1,end_1],[start_2,end_2],...]
+    (start_i < end_i), determine if a person could add all meetings to their schedule without any conflicts.
+    [EASY] https://leetcode.com/problems/meeting-rooms/
+
+    >>> can_attend_meetings([[0,30],[5,10],[15,20]])
+    False
+    >>> can_attend_meetings([[5,8],[9,15]])
+    True
+    """
+    intervals.sort()
+    for i in range(1, len(intervals)):
+        if intervals[i][0] < intervals[i - 1][1]:
+            return False
+    return True
+
+
+def min_meeting_rooms(intervals: List[List[int]]) -> int:
+    """
+    Given an array of meeting time interval objects consisting of start and end times [[start_1,end_1],[start_2,end_2],...]
+    (start_i < end_i), find the minimum number of days required to schedule all meetings without any conflicts.
+    [MEDIUM] https://leetcode.com/problems/meeting-rooms-ii/
+
+    >>> min_meeting_rooms([[0,40],[5,10],[15,20]])
+    2
+    >>> min_meeting_rooms([[4,9]])
+    1
+    """
+    intervals.sort()
+    days_end = []
+    for interval in intervals:
+        for i in range(len(days_end)):
+            if interval[0] >= days_end[i]:
+                days_end[i] = interval[1]
+                break
+        else:
+            days_end.append(interval[1])
+    return len(days_end)
+
+
 if __name__ == "__main__":
     import doctest
 
