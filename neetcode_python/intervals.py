@@ -89,6 +89,31 @@ def merge_intervals(intervals: List[List[int]]) -> List[List[int]]:
     return intervals[:i + 1]
 
 
+def erase_overlap_intervals(intervals: List[List[int]]) -> int:
+    """
+    Given an array of intervals where intervals[i] = [start_i, end_i], return the minimum number of intervals you need
+    to remove to make the rest of the intervals non-overlapping.
+    [MEDIUM] https://leetcode.com/problems/non-overlapping-intervals/
+
+    >>> erase_overlap_intervals([[1,2],[2,3],[3,4],[1,3]])
+    1
+    >>> erase_overlap_intervals([[1,2],[1,2],[1,2]])
+    2
+    >>> erase_overlap_intervals([[1,2],[2,3]])
+    0
+    """
+    intervals.sort()
+    last, count, start, end = -10e6, 0, 0, 1
+    for interval in intervals:
+        if interval[start] < last:
+            count += 1
+            last = min(last, interval[end])
+        else:
+            last = interval[end]
+
+    return count
+
+
 if __name__ == "__main__":
     import doctest
 
