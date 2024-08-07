@@ -91,6 +91,37 @@ def set_zeroes(matrix: List[List[int]]) -> None:
                 matrix[i][j] = 0
 
 
+def is_happy(n: int) -> bool:
+    """
+    Write an algorithm to determine if a number n is happy.
+
+    A happy number is a number defined by the following process:
+    * Starting with any positive integer, replace the number by the sum of the squares of its digits.
+    * Repeat the process until the number equals 1 (where it will stay), or it loops endlessly in a cycle
+    which does not include 1.
+    * Those numbers for which this process ends in 1 are happy.
+
+    Return true if n is a happy number, and false if not.
+
+    [EASY] https://leetcode.com/problems/happy-number/
+
+    >>> is_happy(19)
+    True
+    >>> is_happy(2)
+    False
+    """
+    for _ in range(7):
+        temp = 0
+        while n != 0:
+            temp += (n % 10) ** 2
+            n //= 10
+        if temp == 1:
+            return True
+        n = temp
+
+    return False
+
+
 if __name__ == "__main__":
     import doctest
 
