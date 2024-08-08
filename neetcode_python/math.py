@@ -122,6 +122,56 @@ def is_happy(n: int) -> bool:
     return False
 
 
+def plus_one(digits: List[int]) -> List[int]:
+    """
+    You are given a large integer represented as an integer array digits, where each digits[i] is the ith digit of the
+    integer. The digits are ordered from most significant to least significant in left-to-right order. The large integer
+    does not contain any leading 0's.
+
+    Increment the large integer by one and return the resulting array of digits.
+
+    [EASY] https://leetcode.com/problems/plus-one/
+
+    >>> plus_one([1,2,3])
+    [1, 2, 4]
+    >>> plus_one([4,3,2,1])
+    [4, 3, 2, 2]
+    >>> plus_one([9])
+    [1, 0]
+    """
+    for i in reversed(range(len(digits))):
+        if digits[i] < 9:
+            digits[i] += 1
+            return digits
+        digits[i] = 0
+
+    return [1] + digits
+
+
+def my_pow(x: float, n: int) -> float:
+    """
+    Implement pow(x, n), which calculates x raised to the power n (i.e., x^n).
+
+    [MEDIUM] https://leetcode.com/problems/powx-n/
+
+    >>> my_pow(2.00000, 10)
+    1024.0
+    >>> round(my_pow(2.10000, 3), 5)
+    9.261
+    >>> my_pow(2.00000, -2)
+    0.25
+    """
+    if n == 0:
+        return 1
+    if n < 0:
+        x = 1 / x
+        n *= - 1
+    if n % 2 == 1:
+        return x * my_pow(x, n - 1)
+    num = my_pow(x, n // 2)
+    return num * num
+
+
 if __name__ == "__main__":
     import doctest
 
