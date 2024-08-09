@@ -172,6 +172,29 @@ def my_pow(x: float, n: int) -> float:
     return num * num
 
 
+def multiply_strings(num1: str, num2: str) -> str:
+    """
+    Given two non-negative integers num1 and num2 represented as strings, return the product of num1 and num2,
+    also represented as a string.
+
+    Note: You must not use any built-in BigInteger library or convert the inputs to integer directly.
+
+    [MEDIUM] https://leetcode.com/problems/multiply-strings/
+
+    >>> multiply_strings('2', '3')
+    '6'
+    >>> multiply_strings('123', '456')
+    '56088'
+    """
+    res, l1, l2 = 0, len(num1), len(num2)
+    for i in range(l1):
+        for j in range(l2):
+            res += (ord(num1[l1 - 1 - i]) - ord("0")) * \
+                   (ord(num2[l2 - 1 - j]) - ord("0")) * \
+                   (10 ** (i + j))
+    return str(res)
+
+
 if __name__ == "__main__":
     import doctest
 
