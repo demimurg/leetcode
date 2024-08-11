@@ -1,4 +1,3 @@
-from select import select
 from typing import *
 
 
@@ -193,6 +192,64 @@ def multiply_strings(num1: str, num2: str) -> str:
                    (ord(num2[l2 - 1 - j]) - ord("0")) * \
                    (10 ** (i + j))
     return str(res)
+
+
+class DetectSquares:
+    """
+    A data structure to track points on the X-Y plane and count the number of axis-aligned squares that can be formed.
+
+    The class supports two operations:
+    1. `add(point: List[int]) -> None`: Adds a new point [x, y] to the data structure. Duplicate points are allowed
+       and should be treated as different points.
+    2. `count(point: List[int]) -> int`: Counts the number of ways to choose three points from the data structure such that the
+       three points and the query point form an axis-aligned square with positive area.
+
+    Example usage:
+    >>> ds = DetectSquares()
+    >>> ds.add([3, 10])
+    >>> ds.add([11, 2])
+    >>> ds.add([3, 2])
+    >>> ds.count([11, 10])
+    1
+    >>> ds.count([14, 8])
+    0
+    >>> ds.add([11, 2])
+    >>> ds.count([11, 10])
+    2
+
+    [MEDIUM] https://leetcode.com/problems/detect-squares/
+    """
+    grid: Dict[int, Dict[int, int]]
+
+    def __init__(self):
+        self.grid = dict()
+
+    def add(self, point: List[int]) -> None:
+        x, y = point
+        if x not in self.grid:
+            self.grid[x] = {}
+        if y not in self.grid[x]:
+            self.grid[x][y] = 0
+        self.grid[x][y] += 1
+
+    def exists(self, x: int, y: int) -> bool:
+        return x in self.grid and y in self.grid[x]
+
+    def count(self, point: List[int]) -> int:
+        squares = 0
+
+        x, y = point[0], point[1]
+        for y2 in self.grid.get(x, []):
+            delta = abs(y2 - y)
+            if delta == 0:
+                continue
+
+            if self.exists(x + delta, y) and self.exists(x + delta, y2):
+                squares += self.grid[x + delta][y] * self.grid[x + delta][y2] * self.grid[x][y2]
+            if self.exists(x - delta, y) and self.exists(x - delta, y2):
+                squares += self.grid[x - delta][y] * self.grid[x - delta][y2] * self.grid[x][y2]
+
+        return squares
 
 
 if __name__ == "__main__":
