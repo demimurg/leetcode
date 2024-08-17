@@ -1,4 +1,5 @@
 import heapq
+from itertools import count
 from typing import *
 
 
@@ -35,14 +36,14 @@ def can_jump(nums: List[int]) -> bool:
     >>> can_jump([3, 2, 1, 0, 4])
     False
     """
-    can_jump_i = 0
-    for i in range(len(nums)):
-        can_jump_i = max(can_jump_i, i + nums[i])
-        if can_jump_i >= len(nums):
+    i, can_jump_i = 0, 0
+    while i <= can_jump_i:
+        if i == len(nums) - 1:
             return True
-        if can_jump_i <= i:
-            return False
-    return True
+        can_jump_i = max(can_jump_i, i + nums[i])
+        i += 1
+
+    return False
 
 
 def jump(nums: List[int]) -> int:
@@ -95,6 +96,22 @@ def can_complete_circuit(gas: List[int], cost: List[int]) -> int:
     -1
     """
     cur, total, start_i = 0, 0, 0
+    for i in range(2 * len(gas)):
+        i_reminder = i % len(gas)
+        if i > start_i and i_reminder == start_i:
+            return start_i
+        diff = gas[i_reminder] - cost[i_reminder]
+        cur += diff
+        total += diff
+        if cur < 0:
+            cur = 0
+            start_i = i + 1
+
+    return -1
+
+
+def can_complete_circuit_2(gas: List[int], cost: List[int]) -> int:
+    cur, total, start_i = 0, 0, 0
     for i in range(len(gas)):
         diff = gas[i] - cost[i]
         cur += diff
@@ -123,39 +140,27 @@ def is_n_straight_hand(hand: List[int], group_size: int) -> bool:
     """
     if len(hand) % group_size != 0:
         return False
-    heapq.heapify(hand)
 
-    groups = []
-    while len(hand) > 0:
-        card = heapq.heappop(hand)
+    hand.sort()
+    counter = {}
+    for card in hand:
+        if card not in counter:
+            counter[card] = 0
+        counter[card] += 1
 
-        min_group = 100000
-        # add card to one of existant groups or create new
-        for i in range(len(groups)):
-            if card != groups[i][0] + 1:
-                min_group = min(min_group, groups[i][0])
-                continue
+    for first_card in hand:
+        # we already added this card to group, it can't be first
+        if counter[first_card] == 0:
+            continue
 
-            # increment max value of group, and decrement awaited number of members
-            groups[i][0] += 1
-            groups[i][1] -= 1
-
-            # remove filled group in memory efficient way
-            if groups[i][1] == 0:
-                if i < len(groups) - 1:
-                    groups[i] = groups[-1]
-                groups.pop()
-            break
-        else:
-            if card > min_group:
+        # update counter for all group cards
+        for card in range(first_card, first_card + group_size):
+            # can't create group if there is no some of consecutive cards
+            if card not in counter or counter[card] == 0:
                 return False
-            if group_size <= 1:
-                break
-            # add new group started from current value if consequtive card not found
-            groups.append([card, group_size - 1])
+            counter[card] -= 1
 
-    # all groups must be filled and deleted
-    return len(groups) == 0
+    return True
 
 
 def merge_triplets(triplets: List[List[int]], target: List[int]) -> bool:
