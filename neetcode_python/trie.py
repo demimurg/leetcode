@@ -10,8 +10,8 @@ class Trie:
     """
 
     def __init__(self):
-        self.childs = [None] * 26
-        self.is_word = False
+        self.childs: List[Optional[Trie]] = [None] * 26
+        self.is_word: bool = False
 
     def insert(self, word: str) -> None:
         node = self

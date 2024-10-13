@@ -433,6 +433,58 @@ def find_redundant_connection_dfs(edges: List[List[int]]) -> List[int]:
     return []
 
 
+def islands_and_treasure(grid: List[List[int]]) -> None:
+    """
+    You are given a m x n 2D grid initialized with these three possible values:
+    -1: A water cell that can not be traversed.
+    0: A treasure chest.
+    INF: A land cell that can be traversed (represented by 2^31 - 1 = 2147483647).
+
+    Fill each land cell with the distance to its nearest treasure chest. If a land cell cannot
+    reach a treasure chest, the value should remain INF. The grid can only be traversed up,
+    down, left, or right.
+
+    [MEDIUM] https://leetcode.com/problems/islands-and-treasure/
+
+    >>> grid = [
+    ...    [2147483647, -1, 0, 2147483647],
+    ...    [2147483647, 2147483647, 2147483647, -1],
+    ...    [2147483647, -1, 2147483647, -1],
+    ...    [0, -1, 2147483647, 2147483647]
+    ... ]
+    >>> islands_and_treasure(grid)
+    >>> grid
+    [[3, -1, 0, 1],
+     [2, 2, 1, -1],
+     [1, -1, 2, -1],
+     [0, -1, 3, 4]]
+    """
+    que = deque([])
+    for m in range(len(grid)):
+        for n in range(len(grid[0])):
+            if grid[m][n] == 0:
+                que.append((m, n))
+
+    inf = 2 ^ 32 - 1
+    directions = ((1, 0), (-1, 0), (0, 1), (0, -1))
+    distance, left = 0, 0
+    while que:
+        if left == 0:
+            left = len(que)
+            distance += 1
+
+        (m, n) = que.popleft()
+        left -= 1
+        for (dm, dn) in directions:
+            new_m, new_n = m + dm, n + dn
+            is_valid = 0 <= new_m < len(grid) and \
+                       0 <= new_n < len(grid[0]) and \
+                       grid[new_m][new_n] == inf
+            if is_valid:
+                grid[new_m][new_n] = distance
+                que.append((new_m, new_n))
+
+
 if __name__ == "__main__":
     import doctest
 
