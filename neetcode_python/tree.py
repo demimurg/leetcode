@@ -350,6 +350,28 @@ def kth_smallest(node: Optional[TreeNode], k: int) -> int:
     return -1
 
 
+def build_tree(preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+    """
+    Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree and
+    inorder is the inorder traversal of the same tree, construct and return the binary tree.
+    [MEDIUM] https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
+
+    >>> tree_to_list(build_tree([3,9,20,15,7], [9,3,15,20,7]))
+    [3, 9, 20, None, None, 15, 7]
+    >>> tree_to_list(build_tree([-1], [-1]))
+    [-1]
+    """
+    if len(preorder) == 0:
+        return None
+
+    i = inorder.index(preorder[0])
+    return TreeNode(
+        val=preorder[0],
+        left=build_tree(preorder[1:i + 1], inorder[:i]),
+        right=build_tree(preorder[i + 1:], inorder[i + 1:]),
+    )
+
+
 if __name__ == "__main__":
     import doctest
 

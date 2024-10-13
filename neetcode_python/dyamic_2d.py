@@ -18,16 +18,18 @@ def unique_paths(m: int, n: int) -> int:
     >>> unique_paths(3, 2)
     3
     """
-    # count unique paths for each cell from bottom to up, using 2 rows
-    first, second = [1] * m, [1] * m
-    # don't use last row and last column, because they always have one path
-    for _ in range(n - 1):
-        for i in range(m - 2, -1, -1):
-            second[i] = first[i] + second[i + 1]
+    # count unique paths for each cell from up to bottom, using 2 rows
+    first, second = [1] * n, [1] * n
+    # don't use first row and first column, because they always have one path
+    for _ in range(m - 1):
+        for i in range(1, n):
+            second[i] = first[i] + second[i - 1]
         # reuse memory by swapping rows
         second, first = first, second
-    return first[0]
-    # return math.comb(m + n - 2, m - 1) we can use mathematical approach too
+    return first[-1]
+
+
+# return math.comb(m + n - 2, m - 1) we can use mathematical approach too
 
 
 def longest_common_subsequence(text1: str, text2: str) -> int:
@@ -49,16 +51,15 @@ def longest_common_subsequence(text1: str, text2: str) -> int:
     if len(text1) < len(text2):
         text2, text1 = text1, text2
 
-    row_size = len(text2) + 1  # last column will be always zero
-    first, second = [0] * row_size, [0] * row_size
-    for i in range(len(text1) - 1, -1, -1):
-        for j in range(len(text2) - 1, -1, -1):
+    first, second = [0] * len(text2), [0] * len(text2)
+    for i in range(len(text1)):
+        for j in range(len(text2)):
             if text1[i] == text2[j]:
-                first[j] = 1 + second[j + 1]  # diagonal shift
+                second[j] = 1 + first[j - 1] if j != 0 else 0  # diagonal shift
             else:
-                first[j] = max(second[j], first[j + 1])  # max from bottom and right
+                second[j] = max(first[j], second[j - 1] if j != 0 else 0)  # max from up and left
         first, second = second, first
-    return second[0]
+    return first[-1]
 
 
 def max_profit(prices: List[int]) -> int:
@@ -88,12 +89,10 @@ def max_profit(prices: List[int]) -> int:
             return memo[(i, buying)]
 
         cooldown = dfs(i + 1, buying)
-        if buying:
-            buy = dfs(i + 1, buying=False) - prices[i]
-            memo[(i, buying)] = max(buy, cooldown)
-        else:
-            sell = dfs(i + 2, buying=True) + prices[i]
-            memo[(i, buying)] = max(sell, cooldown)
+        action = dfs(i + 1, buying=False) - prices[i] if buying else \
+            dfs(i + 2, buying=True) + prices[i]
+
+        memo[(i, buying)] = max(action, cooldown)
         return memo[(i, buying)]
 
     return dfs(0, buying=True)

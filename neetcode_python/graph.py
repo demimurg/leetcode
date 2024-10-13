@@ -174,7 +174,7 @@ def pacific_atlantic(heights: List[List[int]]) -> List[List[int]]:
 
     def dfs(r: int, c: int, seen: Set, prev: int):
         if not 0 <= r < rows or not 0 <= c < cols or \
-            (r, c) in seen or heights[r][c] < prev:
+                (r, c) in seen or heights[r][c] < prev:
             return
         seen.add((r, c))
         dfs(r + 1, c, seen, heights[r][c])
@@ -363,7 +363,7 @@ def find_order(num_courses: int, prerequisites: List[List[int]]) -> List[int]:
             return True
 
         for pre in prereq.get(course, []):
-            if dfs(pre, i + 1) == False:
+            if not dfs(pre, i + 1):
                 return False
 
         ordered.append(course)

@@ -152,6 +152,7 @@ def find_cheapest_price_dijkstra(n: int, flights: List[List[int]], src: int, dst
         if point in seen or stops == k:
             continue
 
+        seen.add(point)
         for next_point, next_price in flights_dict.get(point, []):
             if next_point not in seen:
                 heapq.heappush(prices, (price + next_price, next_point, stops + 1))

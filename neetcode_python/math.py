@@ -252,6 +252,46 @@ class DetectSquares:
         return squares
 
 
+def encode(strs: List[str]) -> str:
+    """
+    Design an algorithm to encode a list of strings to a single string. The encoded string is then decoded
+    back to the original list of strings.
+    [MEDIUM] https://leetcode.com/problems/encode-and-decode-strings/
+
+    >>> encode(['neet', 'code', 'love', 'you'])
+    '4#neet4#code4#love3#you'
+    >>> encode(['we', 'say', ':', 'yes'])
+    '2#we3#say1#:3#yes'
+    """
+    for i in range(len(strs)):
+        strs[i] = str(len(strs[i])) + "#" + strs[i]
+    return "".join(strs)
+
+
+def decode(s: str) -> List[str]:
+    """
+    Decodes the encoded string back to the original list of strings.
+
+    >>> decode('4#neet4#code4#love3#you')
+    ['neet', 'code', 'love', 'you']
+    >>> decode('2#we3#say1#:3#yes')
+    ['we', 'say', ':', 'yes']
+    """
+    result = []
+    i = 0
+    while i < len(s):
+        size = 0
+        while s[i] != "#":
+            size = 10 * size + int(s[i])
+            i += 1
+
+        i += 1
+        result.append(s[i:i + size])
+        i += size
+
+    return result
+
+
 if __name__ == "__main__":
     import doctest
 

@@ -67,7 +67,7 @@ def permute(nums: List[int]) -> List[List[int]]:
     res = []
 
     def backtrack(i):
-        if i == len(nums):
+        if i == len(nums) - 1:
             res.append(nums[:])
 
         for j in range(i, len(nums)):

@@ -61,7 +61,7 @@ class Heap:
             i = child_i
 
 
-class KthLargest:
+class KthLarges2:
     def __init__(self, k: int, nums: List[int]):
         self.k = k
         self.heap = Heap(is_max=False)
@@ -75,6 +75,36 @@ class KthLargest:
         if len(self.heap) > self.k:
             return self.heap.pop_top()
         return self.heap.get_top()
+
+
+class KthLargest:
+    """
+    Design a class `KthLargest` that finds the `k`th largest element in a stream of integers.
+    - `KthLargest(int k, int[] nums)` initializes the object with the integer `k` and the stream of integers `nums`.
+    - `int add(int val)` appends the integer `val` to the stream and returns the element representing the `k`th largest element in the stream.
+
+    [MEDIUM] https://leetcode.com/problems/kth-largest-element-in-a-stream/
+
+    kthLargest = KthLargest(3, [4, 5, 8, 2])
+    print(kthLargest.add(3))   # returns 4
+    print(kthLargest.add(5))   # returns 5
+    print(kthLargest.add(10))  # returns 5
+    print(kthLargest.add(9))   # returns 8
+    print(kthLargest.add(4))   # returns 8
+    """
+
+    def __init__(self, k: int, nums: List[int]):
+        # minHeap w/ K largest integers
+        self.minHeap, self.k = nums, k
+        heapq.heapify(self.minHeap)
+        while len(self.minHeap) > k:
+            heapq.heappop(self.minHeap)
+
+    def add(self, val: int) -> int:
+        heapq.heappush(self.minHeap, val)
+        if len(self.minHeap) > self.k:
+            heapq.heappop(self.minHeap)
+        return self.minHeap[0]
 
 
 def last_stone_weight(stones: List[int]) -> int:
