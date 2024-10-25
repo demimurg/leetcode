@@ -454,10 +454,7 @@ def islands_and_treasure(grid: List[List[int]]) -> None:
     ... ]
     >>> islands_and_treasure(grid)
     >>> grid
-    [[3, -1, 0, 1],
-     [2, 2, 1, -1],
-     [1, -1, 2, -1],
-     [0, -1, 3, 4]]
+    [[3, -1, 0, 1], [2, 2, 1, -1], [1, -1, 2, -1], [0, -1, 3, 4]]
     """
     que = deque([])
     for m in range(len(grid)):
@@ -465,7 +462,7 @@ def islands_and_treasure(grid: List[List[int]]) -> None:
             if grid[m][n] == 0:
                 que.append((m, n))
 
-    inf = 2 ^ 32 - 1
+    inf = 2147483647
     directions = ((1, 0), (-1, 0), (0, 1), (0, -1))
     distance, left = 0, 0
     while que:
@@ -483,6 +480,99 @@ def islands_and_treasure(grid: List[List[int]]) -> None:
             if is_valid:
                 grid[new_m][new_n] = distance
                 que.append((new_m, new_n))
+
+
+def valid_tree(n: int, edges: List[List[int]]) -> bool:
+    """
+    Given n nodes labeled from 0 to n - 1 and a list of undirected edges,
+    write a function to check whether these edges make up a valid tree.
+
+    [MEDIUM] https://leetcode.com/problems/graph-valid-tree/
+
+    >>> valid_tree(5, [[0, 1], [0, 2], [0, 3], [1, 4]])
+    True
+    >>> valid_tree(5, [[0, 1], [1, 2], [2, 3], [1, 3], [1, 4]])
+    False
+    """
+    neighbors = {}
+    for (a, b) in edges:
+        if a not in neighbors:
+            neighbors[a] = []
+        if b not in neighbors:
+            neighbors[b] = []
+        neighbors[a].append(b)
+        neighbors[b].append(a)
+
+    seen = set()
+
+    def dfs(node: int, prev: int) -> bool:
+        if node in seen:
+            return False
+        seen.add(node)
+        for n_node in neighbors.get(node, []):
+            if n_node != prev and not dfs(n_node, prev=node):
+                return False
+        return True
+
+    return dfs(0, -1) and len(seen) == n
+
+
+# 0: [1]
+# 1: [0]
+
+def count_connected_components(n: int, edges: list[list[int]]) -> int:
+    """
+    Given an undirected graph with n nodes, and an edges array where edges[i] = [a, b] represents an edge
+    between node a and node b, return the total number of connected components in the graph.
+
+    The nodes are numbered from 0 to n-1.
+
+    [MEDIUM] https://leetcode.com/problems/count-connected-components-in-an-undirected-graph/
+
+    >>> count_connected_components(3, [[0, 1], [0, 2]])
+    1
+    >>> count_connected_components(6, [[0, 1], [1, 2], [2, 3], [4, 5]])
+    2
+    """
+    parent = [i for i in range(n)]
+
+    def find(node: int) -> int:
+        if node != parent[node]:
+            parent[node] = find(parent[node])
+        return parent[node]
+
+    rank = [1 for _ in range(n)]
+
+    def union(a: int, b: int):
+        if a == b:
+            return
+        if rank[a] < rank[b]:
+            a, b = b, a
+        parent[b] = a
+        rank[a] += rank[b]
+
+    for a, b in edges:
+        root_a, root_b = find(a), find(b)
+        union(root_a, root_b)
+
+    return sum(1 for node in range(n) if node == parent[node])
+
+
+def count_connected_components_2(n: int, edges: list[list[int]]) -> int:
+    trees = [{x} for x in range(n)]
+
+    for (a, b) in edges:
+        a_i, b_i = -1, -1
+        for i in range(len(trees)):
+            if a in trees[i]:
+                a_i = i
+            if b in trees[i]:
+                b_i = i
+        if a_i != b_i:
+            trees[a_i] = trees[a_i].union(trees[b_i])
+            trees.pop(b_i)
+
+    return len(trees)
 
 
 if __name__ == "__main__":

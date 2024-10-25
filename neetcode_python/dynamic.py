@@ -163,21 +163,17 @@ def num_decodings(s: str) -> int:
     >>> num_decodings("06")
     0
     """
-    # num decodings plus one and two for current index
-    plus_one, plus_two = 1, 1
-    # iterate from the end
-    for i in range(len(s) - 1, -1, -1):
-        if s[i] == "0":
-            plus_one, plus_two = 0, plus_one
-        elif i < len(s) - 1 and (s[i] == "1" or (s[i] == "2" and int(s[i + 1]) < 7)):
-            # combination of two digits added
-            plus_one, plus_two = plus_one + plus_two, plus_one
-        else:
-            # same number of combinations as before
-            plus_two = plus_one
+    if len(s) == 0 or s[0] == "0":
+        return 0
 
-    # we end on -1 index, so plus one will be zero
-    return plus_one
+    singles, doubles = 1, 0
+    for i in range(1, len(s)):
+        singles, doubles = singles + doubles, singles
+        if not 10 <= int(s[i - 1:i + 1]) <= 26:
+            doubles = 0
+        if s[i] == "0":
+            singles = 0
+    return singles + doubles
 
 
 def coin_change(coins: List[int], amount: int) -> int:
